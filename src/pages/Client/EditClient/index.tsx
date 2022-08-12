@@ -120,15 +120,15 @@ export function EditClient() {
 
   const delClient = useCallback(async () => {
     try {
-      // const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
-      // await axios.delete(
-      //   `https://hair-control.gigalixirapp.com/api/clients/${clientId}`,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   },
-      // );
+      const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
+      await axios.delete(
+        `https://hair-control.gigalixirapp.com/api/clients/${clientId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
     } catch (err) {
       console.log(err);
     } finally {
