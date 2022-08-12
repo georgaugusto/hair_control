@@ -4,11 +4,17 @@ import { Container } from './styles';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean;
+  color?: 'blue' | 'green' | 'red' | 'yellow';
 };
 
-export function Button({ children, loading, ...rest }: ButtonProps) {
+export function Button({
+  children,
+  loading,
+  color = 'blue',
+  ...rest
+}: ButtonProps) {
   return (
-    <Container type="button" {...rest}>
+    <Container color={color} type="button" {...rest}>
       {loading ? 'Carregando...' : children}
     </Container>
   );

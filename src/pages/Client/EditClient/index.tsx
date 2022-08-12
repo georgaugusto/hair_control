@@ -12,6 +12,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { Button } from '../../../components/Button';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'phosphor-react';
+import { useModal } from '../../../hooks/useModal';
+import { Modal } from '../../../components/Modal';
+import { SuccessModal } from '../../../components/Modal/SuccessModal';
 
 interface IClientForm {
   name: string;
@@ -45,12 +48,14 @@ export function EditClient() {
     register,
     handleSubmit,
     setValue,
+    clearErrors,
     formState: { errors },
   } = useForm<IClientForm>({
     resolver: zodResolver(createClientFormValidationSchema),
     defaultValues: clientPropsForm,
   });
 
+  const { isShown, toggle } = useModal();
   const { clientId } = useParams();
   const navigate = useNavigate();
 
@@ -60,6 +65,8 @@ export function EditClient() {
     id: string;
     inserted_at: string;
   }>({ name: '', phone: '', id: '', inserted_at: '' });
+
+  const [edit, setEdit] = useState(false);
 
   const getClient = useCallback(async () => {
     try {
@@ -105,14 +112,35 @@ export function EditClient() {
       } catch (err) {
         console.log(err);
       } finally {
-        navigate('/client', { replace: true });
+        toggle();
       }
     },
     [navigate],
   );
 
+  const delClient = useCallback(async () => {
+    try {
+      // const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
+      // await axios.delete(
+      //   `https://hair-control.gigalixirapp.com/api/clients/${clientId}`,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   },
+      // );
+    } catch (err) {
+      console.log(err);
+    } finally {
+      toggle();
+    }
+  }, []);
+
   useEffect(() => {
     getClient();
+  }, []);
+
+  useEffect(() => {
     if (client) {
       setValue('name', client.name);
       setValue('phone', client.phone);
@@ -181,9 +209,49 @@ export function EditClient() {
             size={24}
             onClick={() => navigate('/client', { replace: true })}
           />
-          <Button type="submit">Salvar</Button>
+          <div>
+            <Button onClick={() => delClient()} color="red">
+              Deletar
+            </Button>
+            {edit ? (
+              <>
+                <Button
+                  onClick={() => {
+                    setEdit(!edit);
+                    clearErrors();
+                  }}
+                >
+                  Cancelar
+                </Button>
+                <Button color="green" type="submit">
+                  Salvar
+                </Button>
+              </>
+            ) : (
+              <Button onClick={() => setEdit(!edit)}>Editar</Button>
+            )}
+          </div>
         </CreateClientTableFooter>
       </form>
+
+      <Modal
+        isShown={isShown}
+        hide={toggle}
+        modalContent={
+          <SuccessModal
+            onConfirm={() => {
+              toggle();
+              setEdit(false);
+              navigate('/client', { replace: true });
+            }}
+            message={
+              edit
+                ? 'Cliente Alterado com sucesso!'
+                : 'Cliente excluído com sucesso!'
+            }
+          />
+        }
+      />
     </CreateClientContainer>
   );
 }

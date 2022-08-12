@@ -7,10 +7,7 @@ import { Table } from '../../components/Table';
 import { ClientContainer, TableActions, ClientHeader } from './styles';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../components/Button';
-import { PencilLine, Trash } from 'phosphor-react';
-import { useModal } from '../../hooks/useModal';
-import { Modal } from '../../components/Modal';
-import { SuccessModal } from '../../components/Modal/SuccessModal';
+import { User } from 'phosphor-react';
 
 interface IClient {
   id: string;
@@ -28,7 +25,6 @@ const clientProps = {
 
 export function Client() {
   const navigate = useNavigate();
-  const { isShown, toggle } = useModal();
 
   const columnHelper = createColumnHelper<IClient>();
 
@@ -57,33 +53,9 @@ export function Client() {
     }
   }, []);
 
-  const delClient = useCallback(async (id: string) => {
-    try {
-      const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
-
-      await axios.delete(
-        `https://hair-control.gigalixirapp.com/api/clients/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-    } catch (err) {
-      console.log(err);
-    } finally {
-      toggle();
-      getAllClients();
-    }
-  }, []);
-
   useEffect(() => {
     getAllClients();
   }, []);
-
-  function handleDeleteClient(id: string) {
-    delClient(id);
-  }
 
   const columns = useMemo(
     () => [
@@ -99,18 +71,6 @@ export function Client() {
         cell: (info) => <i>{info.getValue()}</i>,
         footer: (info) => info.column.id,
       }),
-      columnHelper.accessor((row) => row.inserted_at, {
-        id: 'insertedAt',
-        header: () => <span>Data de Criação</span>,
-        cell: (info) => {
-          const transformDate = new Date(info.getValue()).toLocaleDateString(
-            'pt-BR',
-          );
-
-          return <i>{transformDate}</i>;
-        },
-        footer: (info) => info.column.id,
-      }),
       columnHelper.accessor((row) => row.id, {
         id: 'action',
         header: () => null,
@@ -118,12 +78,17 @@ export function Client() {
           return (
             <TableActions>
               <Link to={`/client/${info.getValue()}`}>
-                <PencilLine size={20} />
+                <User size={20} />
               </Link>
-              <span onClick={() => handleDeleteClient(info.getValue())}>
-                <Trash size={20} />
-              </span>
             </TableActions>
+            // <TableActions>
+            //   <Link to={`/client/${info.getValue()}`}>
+            //     <PencilLine size={20} />
+            //   </Link>
+            //   <span onClick={() => handleDeleteClient(info.getValue())}>
+            //     <Trash size={20} />
+            //   </span>
+            // </TableActions>
           );
         },
       }),
@@ -145,17 +110,6 @@ export function Client() {
       ) : (
         <Table data={client} columns={columns} />
       )}
-
-      <Modal
-        isShown={isShown}
-        hide={toggle}
-        modalContent={
-          <SuccessModal
-            onConfirm={toggle}
-            message="Cliente excluído com sucesso!"
-          />
-        }
-      />
     </ClientContainer>
   );
 }

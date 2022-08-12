@@ -51,16 +51,25 @@ export const CreateClientTableFooter = styled.div`
     }
   }
 
-  button {
-    width: initial;
+  div {
+    text-align: end;
+
+    button {
+      width: initial;
+
+      margin-left: 1rem;
+    }
   }
 
   @media (max-width: 768px) {
     flex-direction: column-reverse !important;
 
-    button {
-      width: 100%;
-      margin-bottom: 1rem;
+    div {
+      button {
+        width: 100%;
+        margin-left: 0;
+        margin-bottom: 1rem;
+      }
     }
   }
 `;
