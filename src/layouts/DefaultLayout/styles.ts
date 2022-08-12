@@ -69,7 +69,7 @@ export const GridMain = styled.main<ContainerType>`
 
   border-radius: 10px;
 
-  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.08);
+  border: 1px solid ${(props) => props.theme['blue-gray-200']};
 
   @media (min-width: 1023px) {
     margin-left: ${(props) => (props.compact ? '130px' : '316px')};

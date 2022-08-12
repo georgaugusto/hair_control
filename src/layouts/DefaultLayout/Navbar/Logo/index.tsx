@@ -2,7 +2,7 @@ import { StyleLink } from './styles';
 
 // import logoImg from '../../../../assets/logo.svg';
 // import letterImg from '../../../../assets/sabin.svg';
-import logoImg from '../../../../assets/logo-ignite.svg';
+import logoImg from '../../../../assets/scissors-blue.svg';
 
 interface ILogoProps {
   compact: boolean;

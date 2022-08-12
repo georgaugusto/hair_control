@@ -1,10 +1,21 @@
 import styled from 'styled-components';
 
-export const TableContainer = styled.div`
+interface ContainerProps {
+  compact: number;
+}
+
+export const TableContainer = styled.div<ContainerProps>`
   width: 100%;
   height: 100%;
 
+  padding-top: 2rem;
+
   .tableContainer {
+    display: block;
+    max-width: calc(
+      100vw - ${(props) => (props.compact ? '130px' : '316px')} - 4rem
+    );
+
     overflow-x: auto;
     overflow-y: hidden;
 
@@ -34,13 +45,17 @@ export const TableContainer = styled.div`
       border-spacing: 0;
 
       thead {
-        background: ${(props) => props.theme['blue-50']};
-        color: ${(props) => props.theme['blue-gray-600']};
+        background: ${(props) => props.theme['blue-gray-100']};
+        color: ${(props) => props.theme['blue-gray-800']};
 
         tr {
-          height: 4rem;
+          height: 2rem;
 
-          border: 1px solid ${(props) => props.theme['blue-gray-100']};
+          font-family: 'Mulish';
+          font-style: normal;
+          font-weight: 500;
+          font-size: 1rem;
+          line-height: 1.125rem;
 
           th {
             text-align: start;
@@ -72,6 +87,12 @@ export const TableContainer = styled.div`
 
           td {
             padding: 0.5rem;
+
+            font-family: 'Mulish';
+            font-style: normal !important;
+            font-weight: 500;
+            font-size: 1rem;
+            line-height: 1.125rem;
 
             border-bottom: 1px solid ${(props) => props.theme['blue-gray-100']};
 

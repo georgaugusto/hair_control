@@ -23,26 +23,44 @@ export const CreateClientContainer = styled.main`
         width: 100%;
       }
     }
+  }
 
-    > div:nth-child(3) {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      svg {
-        cursor: pointer;
-        color: ${(props) => props.theme['blue-gray-600']};
-
-        transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
-
-        &:hover {
-          color: ${(props) => props.theme['blue-gray-300']};
-        }
+  @media (max-width: 768px) {
+    form {
+      > div {
+        gap: 0rem;
+        flex-direction: column;
       }
+    }
+  }
+`;
 
-      button {
-        width: fit-content;
-      }
+export const CreateClientTableFooter = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  svg {
+    cursor: pointer;
+    color: ${(props) => props.theme['blue-gray-800']};
+
+    transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
+
+    &:hover {
+      color: ${(props) => props.theme['blue-gray-500']};
+    }
+  }
+
+  button {
+    width: initial;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column-reverse !important;
+
+    button {
+      width: 100%;
+      margin-bottom: 1rem;
     }
   }
 `;

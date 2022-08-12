@@ -1,5 +1,4 @@
 import styled, { keyframes } from 'styled-components';
-import { shade } from 'polished';
 
 import signInBackgroundImg from '../../assets/sign-in-background.jpg';
 
@@ -19,9 +18,7 @@ export const Content = styled.div`
   align-items: center;
   place-content: center;
 
-  background-color: ${(props) => props.theme['gray-100']};
-
-  border-radius: 0 2rem 2rem 0;
+  background-color: ${(props) => props.theme['blue-gray-50']};
 
   z-index: 1;
 
@@ -52,7 +49,7 @@ export const AnimationContainer = styled.div`
   animation: ${appeatFromLeft} 1s;
 
   img {
-    width: 20rem;
+    width: 100%;
   }
 
   > span {
@@ -69,44 +66,13 @@ export const AnimationContainer = styled.div`
 
     h1 {
       margin-bottom: 1.5rem;
-      color: ${(props) => props.theme['gray-600']};
-    }
-
-    a {
-      color: ${(props) => props.theme['gray-600']};
-      display: block;
-      margin-top: 1.5rem;
-      text-decoration: none;
-      transition: color 0.2s;
-
-      &:hover {
-        color: ${shade(0.2, `#5e9778`)};
-      }
-    }
-  }
-
-  > a {
-    color: ${(props) => props.theme['gray-600']};
-    display: block;
-    margin-top: 1.5rem;
-    text-decoration: none;
-    transition: color 0.2s;
-
-    display: flex;
-    align-items: center;
-
-    &:hover {
-      color: ${shade(0.4, `#5e9778`)};
-    }
-
-    svg {
-      margin-right: 1rem;
+      color: ${(props) => props.theme['blue-gray-700']};
     }
   }
 
   @media (max-width: 420px) {
     img {
-      width: 50vw;
+      width: 100%;
     }
     form {
       width: 90vw;

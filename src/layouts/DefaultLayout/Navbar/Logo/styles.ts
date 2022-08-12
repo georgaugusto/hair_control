@@ -15,9 +15,7 @@ export const StyleLink = styled(Link)<ContainerProps>`
   font-size: 1.625rem;
   font-weight: 700;
 
-  padding: 2rem 0 0 0;
-
-  /* filter: brightness(0) invert(1); */
+  padding: 2rem 0 1rem 0;
 
   img {
     width: ${(props) => (props.compact ? '3rem' : '5.125rem')};

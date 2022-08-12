@@ -5,10 +5,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import * as zod from 'zod';
 
-import { Button } from '../../components/Button';
-import { Input } from '../../components/Input';
+import { Button } from './components/Button';
+import { Input } from './components/Input';
 
-import logoImg2x from '../../assets/logo-ignite.svg';
+import logoImg2x from '../../assets/logo-celia.svg';
 
 import { Container, Content, AnimationContainer, Background } from './styles';
 

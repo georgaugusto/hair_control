@@ -6,7 +6,7 @@ import LayoutContext from '../../../contexts/Layout';
 
 import logoImg from '../../../assets/logo-ignite.svg';
 
-import { Grid, Menu, PageTitle, StyledLink, Options } from './styles';
+import { Grid, Avatar, Menu, PageTitle, StyledLink, Options } from './styles';
 
 export function Header() {
   const { navMobile, setNavMobile } = useContext(LayoutContext);
@@ -23,6 +23,9 @@ export function Header() {
       </PageTitle>
       <Options>
         <p>Olá, Usuário</p>
+        <Avatar>
+          <span>U</span>
+        </Avatar>
         <StyledLink to="/" onClick={() => handleSignOut()}>
           <SignOut />
         </StyledLink>

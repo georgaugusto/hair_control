@@ -7,11 +7,14 @@ import * as zod from 'zod';
 
 import { Input } from '../../../components/Input';
 
-import { CreateClientContainer } from './styles';
+import { CreateClientContainer, CreateClientTableFooter } from './styles';
 import { useCallback } from 'react';
 import { Button } from '../../../components/Button';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'phosphor-react';
+import { useModal } from '../../../hooks/useModal';
+import { Modal } from '../../../components/Modal';
+import { SuccessModal } from '../../../components/Modal/SuccessModal';
 
 interface IClientForm {
   name: string;
@@ -51,36 +54,34 @@ export function CreateClient() {
   });
 
   const navigate = useNavigate();
+  const { isShown, toggle } = useModal();
 
-  const signInUser = useCallback(
-    async (values: IClientForm) => {
-      try {
-        const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
+  const signInUser = useCallback(async (values: IClientForm) => {
+    try {
+      const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
 
-        await axios.post(
-          'https://hair-control.gigalixirapp.com/api/clients',
-          {
-            name: values.name,
-            cpf: values.cpf,
-            rg: values.rg,
-            address: values.address,
-            district: values.district,
-            phone: values.phone,
+      await axios.post(
+        'https://hair-control.gigalixirapp.com/api/clients',
+        {
+          name: values.name,
+          cpf: values.cpf,
+          rg: values.rg,
+          address: values.address,
+          district: values.district,
+          phone: values.phone,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-      } catch (err) {
-        console.log(err);
-      } finally {
-        navigate('/client', { replace: true });
-      }
-    },
-    [navigate],
-  );
+        },
+      );
+    } catch (err) {
+      console.log(err);
+    } finally {
+      toggle();
+    }
+  }, []);
 
   const handleforgotSignIn: SubmitHandler<IClientForm> = async (data) => {
     await signInUser(data);
@@ -139,14 +140,28 @@ export function CreateClient() {
           />
         </div>
 
-        <div>
+        <CreateClientTableFooter>
           <ArrowLeft
-            size={32}
+            size={24}
             onClick={() => navigate('/client', { replace: true })}
           />
           <Button type="submit">Cadastrar</Button>
-        </div>
+        </CreateClientTableFooter>
       </form>
+
+      <Modal
+        isShown={isShown}
+        hide={toggle}
+        modalContent={
+          <SuccessModal
+            onConfirm={() => {
+              toggle();
+              navigate('/client', { replace: true });
+            }}
+            message="Cliente criado com sucesso!"
+          />
+        }
+      />
     </CreateClientContainer>
   );
 }

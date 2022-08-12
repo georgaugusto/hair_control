@@ -8,6 +8,9 @@ import { ClientContainer, TableActions, ClientHeader } from './styles';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../components/Button';
 import { PencilLine, Trash } from 'phosphor-react';
+import { useModal } from '../../hooks/useModal';
+import { Modal } from '../../components/Modal';
+import { SuccessModal } from '../../components/Modal/SuccessModal';
 
 interface IClient {
   id: string;
@@ -25,6 +28,7 @@ const clientProps = {
 
 export function Client() {
   const navigate = useNavigate();
+  const { isShown, toggle } = useModal();
 
   const columnHelper = createColumnHelper<IClient>();
 
@@ -68,6 +72,7 @@ export function Client() {
     } catch (err) {
       console.log(err);
     } finally {
+      toggle();
       getAllClients();
     }
   }, []);
@@ -110,13 +115,12 @@ export function Client() {
         id: 'action',
         header: () => null,
         cell: (info) => {
-          const test = info.getValue();
           return (
             <TableActions>
               <Link to={`/client/${info.getValue()}`}>
                 <PencilLine size={20} />
               </Link>
-              <span onClick={() => handleDeleteClient(test)}>
+              <span onClick={() => handleDeleteClient(info.getValue())}>
                 <Trash size={20} />
               </span>
             </TableActions>
@@ -141,6 +145,17 @@ export function Client() {
       ) : (
         <Table data={client} columns={columns} />
       )}
+
+      <Modal
+        isShown={isShown}
+        hide={toggle}
+        modalContent={
+          <SuccessModal
+            onConfirm={toggle}
+            message="Cliente excluído com sucesso!"
+          />
+        }
+      />
     </ClientContainer>
   );
 }

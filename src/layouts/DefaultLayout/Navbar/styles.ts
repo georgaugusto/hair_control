@@ -22,7 +22,7 @@ export const StyledNav = styled.nav<ContainerType>`
 
   background: ${(props) => props.theme.white};
 
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.08);
+  border-right: 1px solid ${(props) => props.theme['blue-gray-200']};
 
   transition-property: width, transform !important;
   transition-duration: 0.3s !important;

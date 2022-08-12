@@ -1,9 +1,9 @@
 import { HomeContainer } from './styles';
 
-export function Home() {
+export function Service() {
   return (
     <HomeContainer>
-      <h1>Pagina Inicial</h1>
+      <h1>Serviços</h1>
     </HomeContainer>
   );
 }

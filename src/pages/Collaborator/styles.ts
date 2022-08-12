@@ -38,3 +38,39 @@ export const TableActions = styled.div`
     cursor: pointer;
   }
 `;
+
+export const CollaboratorHeader = styled.div`
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 1rem;
+
+  h3 {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 2rem;
+
+    color: ${(props) => props.theme['blue-gray-800']};
+  }
+
+  button {
+    width: fit-content;
+  }
+
+  border-bottom: 1px solid ${(props) => props.theme['blue-gray-100']};
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+
+    button {
+      width: 100%;
+
+      margin-top: 1rem;
+    }
+  }
+`;

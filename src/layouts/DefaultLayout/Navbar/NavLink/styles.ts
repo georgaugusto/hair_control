@@ -20,7 +20,7 @@ export const StyledLink = styled(Link)<ContainerType>`
 
   text-decoration: none;
 
-  font-family: Roboto;
+  font-family: 'Mulish';
   font-style: normal;
   font-weight: 500;
   font-size: 1rem;

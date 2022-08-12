@@ -13,32 +13,29 @@ export const Container = styled.div<ContainerProps>`
     flex-direction: column;
     padding-bottom: 0.25rem;
 
-    font-family: 'Mulish';
-    font-weight: 800;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+    font-weight: bold;
+    font-size: 1rem;
+    line-height: 1.5rem;
 
     color: ${(props) => props.theme['blue-gray-700']};
   }
 
   input {
-    height: 2rem;
+    height: 2.938rem;
 
     padding: 0.5rem 0 0.5rem 0.75rem;
     margin-bottom: 0.125rem;
 
     background: ${(props) => props.theme['blue-gray-50']};
 
-    font-family: 'Mulish';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
+    font-weight: normal;
+    font-size: 1rem;
+    line-height: 130%;
 
     color: ${(props) => props.theme['blue-gray-600']};
     border: 1px solid ${(props) => props.theme['blue-gray-200']};
 
-    border-radius: 6px;
+    border-radius: 10px;
 
     transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
 

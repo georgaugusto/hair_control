@@ -13,8 +13,10 @@ export const LinksGroup = styled.div<ContainerType>`
   overflow: hidden;
   overflow-y: auto;
 
-  padding: 1.5rem 0 0 0;
+  padding: 0.5rem 0 0 0;
   margin-right: 0.125rem;
+
+  border-top: 1px solid ${(props) => props.theme['blue-gray-200']};
 
   transition: flex-grow 0.3s cubic-bezier(0.4, 0, 1, 1);
 

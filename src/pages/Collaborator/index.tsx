@@ -4,8 +4,14 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 import { Table } from '../../components/Table';
 
-import { CollaboratorContainer, TableActions } from './styles';
-import { Link } from 'react-router-dom';
+import {
+  CollaboratorContainer,
+  TableActions,
+  CollaboratorHeader,
+} from './styles';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button } from '../../components/Button';
+import { PencilLine, Trash } from 'phosphor-react';
 
 interface ICollaborator {
   cpf: string;
@@ -29,12 +35,15 @@ const collaboratorProps = {
 
 export function Collaborator() {
   const columnHelper = createColumnHelper<ICollaborator>();
+  const navigate = useNavigate();
 
   const [collaborator, setCollaborator] = useState<ICollaborator[]>([
     collaboratorProps,
   ]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getAllCollaborators = useCallback(async () => {
+    setLoading(true);
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
 
@@ -50,12 +59,38 @@ export function Collaborator() {
       setCollaborator(response.data);
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const delCollaborators = useCallback(async (id: string) => {
+    try {
+      console.log(`del clients id:${id}`);
+      // const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
+
+      // await axios.delete(
+      //   `https://hair-control.gigalixirapp.com/api/clients/${id}`,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //   },
+      // );
+    } catch (err) {
+      console.log(err);
+    } finally {
+      getAllCollaborators();
     }
   }, []);
 
   useEffect(() => {
     getAllCollaborators();
   }, []);
+
+  function handleDeleteCollaborators(id: string) {
+    delCollaborators(id);
+  }
 
   const columns = useMemo(
     () => [
@@ -101,8 +136,12 @@ export function Collaborator() {
         header: () => null,
         cell: (info) => (
           <TableActions>
-            <Link to={`/Collaborator/edit/${info.getValue()}`}>Editar</Link>
-            <span>Deletar</span>
+            <Link to={`/collaborator/${info.getValue()}`}>
+              <PencilLine size={20} />
+            </Link>
+            <span onClick={() => handleDeleteCollaborators(info.getValue())}>
+              <Trash size={20} />
+            </span>
           </TableActions>
         ),
       }),
@@ -112,9 +151,20 @@ export function Collaborator() {
 
   return (
     <CollaboratorContainer>
-      <p>Collaborator</p>
+      <CollaboratorHeader>
+        <h3>Tabela de Colaboradores </h3>
+        <Button
+          onClick={() => navigate('/collaborator/create', { replace: true })}
+        >
+          Adiconar Colaborador
+        </Button>
+      </CollaboratorHeader>
 
-      <Table data={collaborator} columns={columns} />
+      {loading ? (
+        <p>Carregando...</p>
+      ) : (
+        <Table data={collaborator} columns={columns} />
+      )}
     </CollaboratorContainer>
   );
 }

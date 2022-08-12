@@ -19,7 +19,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   body, input-security, textarea, button{
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Mulish', sans-serif;
     font-weight: 400;
     font-size: 1rem;
   }

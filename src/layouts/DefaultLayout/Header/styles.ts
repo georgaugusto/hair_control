@@ -13,6 +13,7 @@ export const Grid = styled.div`
   margin-bottom: 2rem;
 
   background: ${(props) => props.theme.white};
+  border-bottom: 1px solid ${(props) => props.theme['blue-gray-200']};
 
   img:last-child {
     display: none;
@@ -70,11 +71,11 @@ export const PageTitle = styled.div`
   width: max-content;
 
   h3 {
-    font-family: Roboto;
+    font-family: 'Mulish';
     font-style: normal;
-    font-weight: 500;
-    font-size: 1.625rem;
-    line-height: 1.75rem;
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
 
     display: flex;
     align-items: center;
@@ -98,10 +99,10 @@ export const Options = styled.div`
 
   p {
     width: fit-content;
-    font-family: Roboto;
+    font-family: 'Mulish';
     font-style: normal;
-    font-weight: 500;
-    font-size: 1rem;
+    font-weight: 600;
+    font-size: 1.125rem;
     line-height: 1.5rem;
 
     padding: 0 1.5rem 0 0;
@@ -166,5 +167,29 @@ export const StyledLink = styled(Link)`
     img {
       filter: none;
     }
+  }
+`;
+
+export const Avatar = styled.div`
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+
+  width: 2.5rem;
+  height: 2.5rem;
+
+  border-radius: 100%;
+
+  margin-right: 1.5rem;
+
+  background-color: ${(props) => props.theme['blue-100']};
+  color: ${(props) => props.theme['blue-gray-600']};
+
+  span {
+    cursor: default;
+  }
+
+  @media (max-width: 1023px) {
+    display: none !important;
   }
 `;

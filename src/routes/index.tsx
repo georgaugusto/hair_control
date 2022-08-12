@@ -9,6 +9,9 @@ import { Client } from '../pages/Client';
 import { CreateClient } from '../pages/Client/CreateClient';
 import { EditClient } from '../pages/Client/EditClient';
 import { Collaborator } from '../pages/Collaborator';
+import { Sale } from '../pages/Sale';
+import { Service } from '../pages/Service';
+import { Report } from '../pages/Report';
 
 export function Router() {
   return (
@@ -20,11 +23,10 @@ export function Router() {
         <Route path="/client/create" element={<CreateClient />}></Route>
         <Route path="/client/:clientId" element={<EditClient />}></Route>
         <Route path="/collaborator" element={<Collaborator />}></Route>
+        <Route path="/sale" element={<Sale />}></Route>
+        <Route path="/service" element={<Service />}></Route>
+        <Route path="/reports" element={<Report />}></Route>
       </Route>
-      {/* <Route path="/" element={<DefaultLayout />}>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/history" element={<History />}></Route>
-      </Route> */}
     </Routes>
   );
 }

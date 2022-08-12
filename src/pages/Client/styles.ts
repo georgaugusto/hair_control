@@ -51,15 +51,20 @@ export const ClientHeader = styled.div`
   padding: 1rem;
 
   h3 {
-    font-weight: 500;
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 700;
     font-size: 1.5rem;
+    line-height: 2rem;
 
-    color: ${(props) => props.theme['blue-gray-600']};
+    color: ${(props) => props.theme['blue-gray-800']};
   }
 
   button {
     width: fit-content;
   }
+
+  border-bottom: 1px solid ${(props) => props.theme['blue-gray-100']};
 
   @media (max-width: 480px) {
     flex-direction: column;

@@ -8,7 +8,7 @@ export function Title() {
 
   return (
     <PageTitle>
-      <h3>{headerTitle || 'Hair Control'}</h3>
+      <h3>{headerTitle || 'Célia & Cabeleireiros'}</h3>
     </PageTitle>
   );
 }

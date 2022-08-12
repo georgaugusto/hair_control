@@ -7,7 +7,7 @@ import * as zod from 'zod';
 
 import { Input } from '../../../components/Input';
 
-import { CreateClientContainer } from './styles';
+import { CreateClientContainer, CreateClientTableFooter } from './styles';
 import { useCallback, useEffect, useState } from 'react';
 import { Button } from '../../../components/Button';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -176,13 +176,13 @@ export function EditClient() {
           />
         </div>
 
-        <div>
+        <CreateClientTableFooter>
           <ArrowLeft
-            size={32}
+            size={24}
             onClick={() => navigate('/client', { replace: true })}
           />
           <Button type="submit">Salvar</Button>
-        </div>
+        </CreateClientTableFooter>
       </form>
     </CreateClientContainer>
   );

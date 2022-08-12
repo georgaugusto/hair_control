@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   createColumnHelper,
   flexRender,
@@ -7,6 +7,9 @@ import {
   useReactTable,
   ColumnDef,
 } from '@tanstack/react-table';
+
+import LayoutContext from '../../contexts/Layout';
+
 import { TableContainer } from './styles';
 
 interface TableProps {
@@ -21,8 +24,10 @@ export function Table({ data, columns }: TableProps) {
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const { compact } = useContext(LayoutContext);
+
   return (
-    <TableContainer>
+    <TableContainer compact={compact ? 1 : 0}>
       <div className="tableContainer">
         <table>
           <thead>
