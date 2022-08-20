@@ -48,7 +48,7 @@ export const Container = styled.div<ContainerProps>`
     }
 
     &:disabled {
-      background: ${(props) => props.theme['blue-gray-100']};
+      background: ${(props) => props.theme['blue-gray-200']};
 
       cursor: not-allowed;
     }

@@ -38,7 +38,13 @@ export const LinksGroup = styled.div<ContainerType>`
   }
 
   .ReactTooltipCustomeStyles {
-    opacity: 1 !important;
+    a {
+      color: ${(props) => props.theme['blue-gray-100']} !important;
+
+      &:hover {
+        color: ${(props) => props.theme['blue-gray-400']} !important;
+      }
+    }
   }
 
   @media (max-width: 1023px) {

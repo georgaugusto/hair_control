@@ -84,7 +84,16 @@ export function CreateClient() {
   }, []);
 
   const handleforgotSignIn: SubmitHandler<IClientForm> = async (data) => {
-    await signInUser(data);
+    const newData = {
+      address: data.address,
+      cpf: data.cpf.replace(/\D/g, ''),
+      district: data.district,
+      name: data.name,
+      phone: data.phone.replace(/\D/g, ''),
+      rg: data.rg.replace(/\D/g, ''),
+    };
+
+    await signInUser(newData);
   };
 
   return (

@@ -25,6 +25,17 @@ interface IClientForm {
   phone: string;
 }
 
+interface IClient {
+  address: string;
+  cpf: string;
+  district: string;
+  id: string;
+  inserted_at: string;
+  name: string;
+  phone: string;
+  rg: string;
+}
+
 const clientPropsForm = {
   name: '',
   cpf: '',
@@ -32,6 +43,17 @@ const clientPropsForm = {
   address: '',
   district: '',
   phone: '',
+};
+
+const clientProps = {
+  address: '',
+  cpf: '',
+  district: '',
+  id: '',
+  inserted_at: '',
+  name: '',
+  phone: '',
+  rg: '',
 };
 
 const createClientFormValidationSchema = zod.object({
@@ -59,12 +81,7 @@ export function EditClient() {
   const { clientId } = useParams();
   const navigate = useNavigate();
 
-  const [client, setClient] = useState<{
-    name: string;
-    phone: string;
-    id: string;
-    inserted_at: string;
-  }>({ name: '', phone: '', id: '', inserted_at: '' });
+  const [client, setClient] = useState<IClient>(clientProps);
 
   const [edit, setEdit] = useState(false);
 
@@ -143,12 +160,34 @@ export function EditClient() {
   useEffect(() => {
     if (client) {
       setValue('name', client.name);
-      setValue('phone', client.phone);
+      setValue(
+        'cpf',
+        client.cpf.replace(/(\d{3})?(\d{3})?(\d{3})?(\d{2})/, '$1.$2.$3-$4'),
+      );
+      setValue(
+        'rg',
+        client.rg.replace(/(\d{2})(\d{3})(\d{3})(\d{1})$/, '$1.$2.$3-$4'),
+      );
+      setValue('address', client.address);
+      setValue('district', client.district);
+      setValue(
+        'phone',
+        client.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3'),
+      );
     }
   }, [client]);
 
   const handleforgotSignIn: SubmitHandler<IClientForm> = async (data) => {
-    await putClient(data);
+    const newData = {
+      address: data.address,
+      cpf: data.cpf.replace(/\D/g, ''),
+      district: data.district,
+      name: data.name,
+      phone: data.phone.replace(/\D/g, ''),
+      rg: data.rg.replace(/\D/g, ''),
+    };
+
+    await putClient(newData);
   };
 
   return (
@@ -159,6 +198,7 @@ export function EditClient() {
             type="text"
             label="Nome Completo"
             placeholder="Nome Completo"
+            disabled={!edit}
             error={errors.name}
             {...register('name')}
           />
@@ -167,6 +207,7 @@ export function EditClient() {
             label="CPF"
             placeholder="CPF"
             mask={'CPF'}
+            disabled={!edit}
             error={errors.cpf}
             {...register('cpf')}
           />
@@ -175,6 +216,7 @@ export function EditClient() {
             label="RG"
             placeholder="RG"
             mask={'RG'}
+            disabled={!edit}
             error={errors.rg}
             {...register('rg')}
           />
@@ -184,6 +226,7 @@ export function EditClient() {
             type="text"
             label="Endereço"
             placeholder="Endereço"
+            disabled={!edit}
             error={errors.address}
             {...register('address')}
           />
@@ -191,6 +234,7 @@ export function EditClient() {
             type="text"
             label="Bairro"
             placeholder="Bairro"
+            disabled={!edit}
             error={errors.district}
             {...register('district')}
           />
@@ -199,6 +243,7 @@ export function EditClient() {
             label="Telefone"
             mask={'phone'}
             placeholder="Telefone"
+            disabled={!edit}
             error={errors.phone}
             {...register('phone')}
           />
@@ -210,9 +255,14 @@ export function EditClient() {
             onClick={() => navigate('/client', { replace: true })}
           />
           <div>
-            <Button onClick={() => delClient()} color="red">
-              Deletar
-            </Button>
+            {edit ? (
+              <> </>
+            ) : (
+              <Button onClick={() => delClient()} color="red">
+                Deletar
+              </Button>
+            )}
+
             {edit ? (
               <>
                 <Button

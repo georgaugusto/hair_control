@@ -13,8 +13,13 @@ export const TableContainer = styled.div<ContainerProps>`
   .tableContainer {
     display: block;
     max-width: calc(
-      100vw - ${(props) => (props.compact ? '130px' : '316px')} - 4rem
+      100vw - ${(props) => (props.compact ? '130px' : '316px')} - 4rem - 2rem
     );
+
+    background: #f7f7f8;
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+    margin: 1rem;
 
     overflow-x: auto;
     overflow-y: hidden;
@@ -22,12 +27,12 @@ export const TableContainer = styled.div<ContainerProps>`
     white-space: nowrap;
 
     @media (max-width: 1023px) {
-      max-width: calc(100vw - 3rem);
+      max-width: calc(100vw - 3rem - 2rem);
     }
 
     @media (max-width: 767px) {
       display: block;
-      max-width: calc(100vw - 3rem);
+      max-width: calc(100vw - 3rem - 2rem);
       overflow-x: scroll;
       overflow-y: hidden;
 
@@ -35,7 +40,7 @@ export const TableContainer = styled.div<ContainerProps>`
     }
 
     @media (max-width: 480px) {
-      max-width: calc(100vw - 1rem);
+      max-width: calc(100vw - 1rem - 2rem);
     }
   }
 
@@ -67,6 +72,15 @@ export const TableContainer = styled.div<ContainerProps>`
             }
             &:last-child {
               padding-right: 2rem;
+            }
+
+            @media (max-width: 480px) {
+              &:first-child {
+                padding-left: 0.5rem;
+              }
+              &:last-child {
+                padding-right: 0.5rem;
+              }
             }
           }
         }
@@ -101,6 +115,15 @@ export const TableContainer = styled.div<ContainerProps>`
             }
             &:last-child {
               padding-right: 2rem;
+            }
+
+            @media (max-width: 480px) {
+              &:first-child {
+                padding-left: 0.5rem;
+              }
+              &:last-child {
+                padding-right: 0.5rem;
+              }
             }
           }
         }

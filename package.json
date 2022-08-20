@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^2.9.5",
+    "@huner2/react-tooltip": "^4.2.22",
     "@tanstack/react-table": "^8.5.11",
     "axios": "^0.27.2",
     "date-fns": "^2.28.0",

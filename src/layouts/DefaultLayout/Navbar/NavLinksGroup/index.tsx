@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import ReactTooltip from '@huner2/react-tooltip';
 import { MouseEvent, useState } from 'react';
 // import ReactTooltip from 'react-tooltip';
 
@@ -83,25 +84,24 @@ export function NavLinksGroup({
       return <> </>;
     }
     return (
-      <> </>
-      //   <ReactTooltip
-      //     className="ReactTooltipCustomeStyles"
-      //     id="tooltip"
-      //     effect="solid"
-      //     place="right"
-      //     backgroundColor="#41434b"
-      //     delayHide={150}
-      //     delayShow={50}
-      //     delayUpdate={500}
-      //     getContent={(dataTip) =>
-      //       l.id === Number(dataTip) &&
-      //       l.subLinks?.map((sb: any) => (
-      //         <SubMenusLinks key={sb.to} to={sb.to}>
-      //           {sb.label}
-      //         </SubMenusLinks>
-      //       ))
-      //     }
-      //   />
+      <ReactTooltip
+        className="ReactTooltipCustomeStyles"
+        id="tooltip"
+        effect="solid"
+        place="right"
+        backgroundColor="#1E40AF"
+        delayHide={150}
+        delayShow={50}
+        delayUpdate={500}
+        getContent={(dataTip) =>
+          l.id === Number(dataTip) &&
+          l.subLinks?.map((sb: any) => (
+            <SubMenusLinks key={sb.to} to={sb.to}>
+              {sb.label}
+            </SubMenusLinks>
+          ))
+        }
+      />
     );
   }
 

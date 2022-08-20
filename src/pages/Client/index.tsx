@@ -11,16 +11,24 @@ import { User } from 'phosphor-react';
 
 interface IClient {
   id: string;
-  inserted_at: string;
   name: string;
   phone: string;
+  cpf: string;
+  rg: string;
+  address: string;
+  district: string;
+  inserted_at: string;
 }
 
 const clientProps = {
   id: '',
-  inserted_at: '',
   name: '',
   phone: '',
+  cpf: '',
+  rg: '',
+  address: '',
+  district: '',
+  inserted_at: '',
 };
 
 export function Client() {
@@ -30,6 +38,7 @@ export function Client() {
 
   const [client, setClient] = useState<IClient[]>([clientProps]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   const getAllClients = useCallback(async () => {
     setLoading(true);
@@ -47,6 +56,7 @@ export function Client() {
 
       setClient(response.data);
     } catch (err) {
+      setError(true);
       console.log(err);
     } finally {
       setLoading(false);
@@ -68,9 +78,31 @@ export function Client() {
       columnHelper.accessor((row) => row.phone, {
         id: 'phone',
         header: () => <span>Telefone</span>,
-        cell: (info) => <i>{info.getValue()}</i>,
+        cell: (info) => (
+          <i>
+            {info.getValue().replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')}
+          </i>
+        ),
         footer: (info) => info.column.id,
       }),
+      // columnHelper.accessor((row) => row.cpf, {
+      //   id: 'cpf',
+      //   cell: (info) => <i>{info.getValue()}</i>,
+      //   footer: (info) => info.column.id,
+      //   header: () => <span>CPF</span>,
+      // }),
+      // columnHelper.accessor((row) => row.rg, {
+      //   id: 'rg',
+      //   cell: (info) => <i>{info.getValue()}</i>,
+      //   footer: (info) => info.column.id,
+      //   header: () => <span>RG</span>,
+      // }),
+      // columnHelper.accessor((row) => row.address, {
+      //   id: 'address',
+      //   cell: (info) => <i>{info.getValue()}</i>,
+      //   footer: (info) => info.column.id,
+      //   header: () => <span>Endereço</span>,
+      // }),
       columnHelper.accessor((row) => row.id, {
         id: 'action',
         header: () => null,
@@ -81,14 +113,6 @@ export function Client() {
                 <User size={20} />
               </Link>
             </TableActions>
-            // <TableActions>
-            //   <Link to={`/client/${info.getValue()}`}>
-            //     <PencilLine size={20} />
-            //   </Link>
-            //   <span onClick={() => handleDeleteClient(info.getValue())}>
-            //     <Trash size={20} />
-            //   </span>
-            // </TableActions>
           );
         },
       }),
@@ -105,7 +129,9 @@ export function Client() {
         </Button>
       </ClientHeader>
 
-      {loading ? (
+      {error ? (
+        <p>Erro no servidor</p>
+      ) : loading ? (
         <p>Carregando...</p>
       ) : (
         <Table data={client} columns={columns} />
