@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const CreateClientContainer = styled.main`
+export const CreateCollaboratorContainer = styled.main`
   flex: 1;
 
   padding: 2rem;
@@ -35,7 +35,7 @@ export const CreateClientContainer = styled.main`
   }
 `;
 
-export const CreateClientTableFooter = styled.div`
+export const CollaboratorAtions = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;

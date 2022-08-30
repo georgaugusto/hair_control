@@ -1,8 +1,9 @@
 import { useContext } from 'react';
 import { SignOut, List } from 'phosphor-react';
 
-import { Title } from '../Navbar/PageTitle';
 import LayoutContext from '../../../contexts/Layout';
+
+import { Title } from '../Navbar/PageTitle';
 
 import logoImg from '../../../assets/logo-ignite.svg';
 

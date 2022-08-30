@@ -1,8 +1,9 @@
 import { useContext } from 'react';
 
+import LayoutContext from '../../../contexts/Layout';
+
 import { Logo } from './Logo';
 import { NavToggle } from './NavToggle';
-import LayoutContext from '../../../contexts/Layout';
 import { NavLinksGroup } from './NavLinksGroup';
 
 import { Container, StyledNav, Backdrop } from './styles';

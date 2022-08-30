@@ -12,23 +12,23 @@ import { useModal } from '../../../hooks/useModal';
 import { Modal } from '../../../components/Modal';
 import { SuccessModal } from '../../../components/Modal/SuccessModal';
 
-import { CreateClientContainer, CreateClientTableFooter } from './styles';
+import { CreateCollaboratorContainer, CollaboratorAtions } from './styles';
 
-interface IClientForm {
+interface ICollaboratorForm {
   name: string;
   cpf: string;
   email: string;
   password: string;
 }
 
-const clientPropsForm = {
+const collaboratorPropsForm = {
   name: '',
   cpf: '',
   email: '',
   password: '',
 };
 
-const createClientFormValidationSchema = zod.object({
+const createCollaboratorFormValidationSchema = zod.object({
   name: zod.string().min(1, 'Nome Obrigatório.'),
   cpf: zod.string().min(14, 'Deve ser um CPF válido.'),
   email: zod.string().email('Deve ser um E-mail válido.'),
@@ -43,15 +43,15 @@ export function CreateCollaborator() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IClientForm>({
-    resolver: zodResolver(createClientFormValidationSchema),
-    defaultValues: clientPropsForm,
+  } = useForm<ICollaboratorForm>({
+    resolver: zodResolver(createCollaboratorFormValidationSchema),
+    defaultValues: collaboratorPropsForm,
   });
 
   const navigate = useNavigate();
   const { isShown, toggle } = useModal();
 
-  const signInUser = useCallback(async (values: IClientForm) => {
+  const signInUser = useCallback(async (values: ICollaboratorForm) => {
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
 
@@ -76,7 +76,7 @@ export function CreateCollaborator() {
     }
   }, []);
 
-  const handleforgotSignIn: SubmitHandler<IClientForm> = async (data) => {
+  const handleforgotSignIn: SubmitHandler<ICollaboratorForm> = async (data) => {
     const newData = {
       cpf: data.cpf.replace(/\D/g, ''),
       email: data.email,
@@ -88,7 +88,7 @@ export function CreateCollaborator() {
   };
 
   return (
-    <CreateClientContainer>
+    <CreateCollaboratorContainer>
       <form onSubmit={handleSubmit(handleforgotSignIn)}>
         <div>
           <Input
@@ -124,13 +124,13 @@ export function CreateCollaborator() {
           />
         </div>
 
-        <CreateClientTableFooter>
+        <CollaboratorAtions>
           <ArrowLeft
             size={24}
             onClick={() => navigate('/collaborator', { replace: true })}
           />
           <Button type="submit">Cadastrar</Button>
-        </CreateClientTableFooter>
+        </CollaboratorAtions>
       </form>
 
       <Modal
@@ -146,6 +146,6 @@ export function CreateCollaborator() {
           />
         }
       />
-    </CreateClientContainer>
+    </CreateCollaboratorContainer>
   );
 }

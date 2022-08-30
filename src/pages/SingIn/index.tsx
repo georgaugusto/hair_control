@@ -6,16 +6,17 @@ import axios from 'axios';
 import * as zod from 'zod';
 import decode from 'jwt-decode';
 
+import { useModal } from '../../hooks/useModal';
+import IdentificationContext from '../../contexts/Identification';
+
 import { Button } from './components/Button';
 import { Input } from './components/Input';
+import { Modal } from '../../components/Modal';
+import { FailureModal } from '../../components/Modal/FailureModal';
 
 import logoImg2x from '../../assets/logo-celia.svg';
 
 import { Container, Content, AnimationContainer, Background } from './styles';
-import { Modal } from '../../components/Modal';
-import { FailureModal } from '../../components/Modal/FailureModal';
-import { useModal } from '../../hooks/useModal';
-import IdentificationContext from '../../contexts/identification';
 
 interface SingInFormData {
   email: string;
@@ -53,7 +54,7 @@ export function SingIn() {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('@SolouChuva:token');
+    const token = localStorage.getItem('@hair:user-1.0.0');
     if (token) navigate('/dashboard');
   }, [navigate]);
 
@@ -96,7 +97,7 @@ export function SingIn() {
     <Container>
       <Content>
         <AnimationContainer>
-          <img src={logoImg2x} alt="logo Sol ou Chuva" />
+          <img src={logoImg2x} alt="logo Célia e Cabeleireiros" />
 
           <form onSubmit={handleSubmit(handleforgotSignIn)}>
             <h1>Faça seu logon</h1>

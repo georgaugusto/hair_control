@@ -1,5 +1,5 @@
-import { Warning } from 'phosphor-react';
 import { useCallback, useEffect } from 'react';
+import { Warning } from 'phosphor-react';
 
 import { Button } from '../../Button';
 

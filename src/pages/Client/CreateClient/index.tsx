@@ -1,20 +1,19 @@
-import axios from 'axios';
-
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import * as zod from 'zod';
-
-import { Input } from '../../../components/Input';
-
-import { CreateClientContainer, CreateClientTableFooter } from './styles';
 import { useCallback } from 'react';
-import { Button } from '../../../components/Button';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'phosphor-react';
+import axios from 'axios';
+import * as zod from 'zod';
+
 import { useModal } from '../../../hooks/useModal';
+
+import { Input } from '../../../components/Input';
 import { Modal } from '../../../components/Modal';
+import { Button } from '../../../components/Button';
 import { SuccessModal } from '../../../components/Modal/SuccessModal';
+
+import { CreateClientContainer, CreateClientTableFooter } from './styles';
 
 interface IClientForm {
   name: string;

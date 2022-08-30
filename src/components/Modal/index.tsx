@@ -1,4 +1,3 @@
-// import { X } from 'phosphor-react';
 import { ReactNode } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -15,7 +14,6 @@ export function Modal({ isShown, hide, modalContent }: ModalProps) {
     <>
       <Backdrop />
       <Container>
-        {/* <X size={24} onClick={hide} /> */}
         <Content>
           <div>{modalContent}</div>
         </Content>

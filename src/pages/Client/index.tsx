@@ -1,13 +1,13 @@
-import axios from 'axios';
 import { useCallback, useMemo, useEffect, useState } from 'react';
 import { createColumnHelper } from '@tanstack/react-table';
+import { Link, useNavigate } from 'react-router-dom';
+import { User } from 'phosphor-react';
+import axios from 'axios';
 
 import { Table } from '../../components/Table';
+import { Button } from '../../components/Button';
 
 import { ClientContainer, TableActions, ClientHeader } from './styles';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '../../components/Button';
-import { User } from 'phosphor-react';
 
 interface IClient {
   id: string;
@@ -33,12 +33,12 @@ const clientProps = {
 
 export function Client() {
   const navigate = useNavigate();
-
   const columnHelper = createColumnHelper<IClient>();
-  const [width, setWidth] = useState<number>(0);
+
   const [client, setClient] = useState<IClient[]>([clientProps]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [width, setWidth] = useState<number>(0);
 
   const getAllClients = useCallback(async () => {
     setLoading(true);
@@ -55,9 +55,8 @@ export function Client() {
       );
 
       setClient(response.data);
-    } catch (err) {
+    } catch {
       setError(true);
-      console.log(err);
     } finally {
       setLoading(false);
     }

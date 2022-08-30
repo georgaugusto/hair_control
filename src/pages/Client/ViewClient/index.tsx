@@ -1,20 +1,19 @@
-import axios from 'axios';
-
+import { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-
-import * as zod from 'zod';
-
-import { Input } from '../../../components/Input';
-
-import { CreateClientContainer, CreateClientTableFooter } from './styles';
-import { useCallback, useEffect, useState } from 'react';
-import { Button } from '../../../components/Button';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'phosphor-react';
+import axios from 'axios';
+import * as zod from 'zod';
+
 import { useModal } from '../../../hooks/useModal';
+
+import { Input } from '../../../components/Input';
+import { Button } from '../../../components/Button';
 import { Modal } from '../../../components/Modal';
 import { SuccessModal } from '../../../components/Modal/SuccessModal';
+
+import { CreateClientContainer, CreateClientTableFooter } from './styles';
 
 interface IClientForm {
   name: string;
@@ -82,7 +81,6 @@ export function ViewClient() {
   const navigate = useNavigate();
 
   const [client, setClient] = useState<IClient>(clientProps);
-
   const [edit, setEdit] = useState(false);
 
   const getClient = useCallback(async () => {

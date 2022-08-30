@@ -1,4 +1,6 @@
-export function CPF(e: React.FormEvent<HTMLInputElement>) {
+import { FormEvent } from 'react';
+
+export function CPF(e: FormEvent<HTMLInputElement>) {
   e.currentTarget.maxLength = 14;
   let { value } = e.currentTarget;
   value = value.replace(/\D/g, '');
@@ -10,7 +12,7 @@ export function CPF(e: React.FormEvent<HTMLInputElement>) {
   return e;
 }
 
-export function RG(e: React.FormEvent<HTMLInputElement>) {
+export function RG(e: FormEvent<HTMLInputElement>) {
   e.currentTarget.maxLength = 12;
   let { value } = e.currentTarget;
   value = value.replace(/\D/g, '');
@@ -22,7 +24,7 @@ export function RG(e: React.FormEvent<HTMLInputElement>) {
   return e;
 }
 
-export function CNPJ(e: React.FormEvent<HTMLInputElement>) {
+export function CNPJ(e: FormEvent<HTMLInputElement>) {
   e.currentTarget.maxLength = 18;
   let { value } = e.currentTarget;
   value = value.replace(/\D/g, '');
@@ -34,7 +36,7 @@ export function CNPJ(e: React.FormEvent<HTMLInputElement>) {
   return e;
 }
 
-export function phone(e: React.FormEvent<HTMLInputElement>) {
+export function phone(e: FormEvent<HTMLInputElement>) {
   e.currentTarget.maxLength = 15;
   let { value } = e.currentTarget;
   value = value.replace(/\D/g, '');
@@ -45,7 +47,7 @@ export function phone(e: React.FormEvent<HTMLInputElement>) {
   return e;
 }
 
-export function CEP(e: React.FormEvent<HTMLInputElement>) {
+export function CEP(e: FormEvent<HTMLInputElement>) {
   e.currentTarget.maxLength = 9;
   let { value } = e.currentTarget;
   value = value.replace(/\D/g, '');
@@ -55,7 +57,7 @@ export function CEP(e: React.FormEvent<HTMLInputElement>) {
   return e;
 }
 
-export function onlyNumbers(e: React.FormEvent<HTMLInputElement>) {
+export function onlyNumbers(e: FormEvent<HTMLInputElement>) {
   let { value } = e.currentTarget;
   value = value.replace(/\D/g, '');
   e.currentTarget.value = value;
@@ -63,7 +65,7 @@ export function onlyNumbers(e: React.FormEvent<HTMLInputElement>) {
 }
 
 export function onlyNumbersWithLimit(
-  e: React.FormEvent<HTMLInputElement>,
+  e: FormEvent<HTMLInputElement>,
   maxNum: number | undefined,
 ) {
   if (maxNum) e.currentTarget.maxLength = maxNum;
@@ -73,14 +75,14 @@ export function onlyNumbersWithLimit(
   return e;
 }
 
-export function onlyLetters(e: React.FormEvent<HTMLInputElement>) {
+export function onlyLetters(e: FormEvent<HTMLInputElement>) {
   let { value } = e.currentTarget;
   value = value.replace(/[0-9!@#¨$%^&*)(+=._-]+/g, '');
   e.currentTarget.value = value;
   return e;
 }
 
-export function money(e: React.FormEvent<HTMLInputElement>) {
+export function money(e: FormEvent<HTMLInputElement>) {
   e.currentTarget.maxLength = 12;
   let { value } = e.currentTarget;
   value = value.replace(/\D/g, '');
@@ -91,7 +93,7 @@ export function money(e: React.FormEvent<HTMLInputElement>) {
   return e;
 }
 
-export function percentage(e: React.FormEvent<HTMLInputElement>) {
+export function percentage(e: FormEvent<HTMLInputElement>) {
   e.currentTarget.maxLength = 7;
   let { value } = e.currentTarget;
   value = value.replace(/\D/g, '');

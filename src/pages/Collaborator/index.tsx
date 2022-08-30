@@ -1,8 +1,8 @@
-import axios from 'axios';
 import { useCallback, useMemo, useEffect, useState } from 'react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { Link, useNavigate } from 'react-router-dom';
 import { User } from 'phosphor-react';
+import axios from 'axios';
 
 import { Table } from '../../components/Table';
 import { Button } from '../../components/Button';

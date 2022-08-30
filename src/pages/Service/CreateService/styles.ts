@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const CollaboratorContainer = styled.main`
+export const CreateServiceContainer = styled.main`
   flex: 1;
 
   padding: 2rem;
@@ -35,7 +35,7 @@ export const CollaboratorContainer = styled.main`
   }
 `;
 
-export const CollaboratorAtions = styled.div`
+export const ServiceAtions = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -51,25 +51,16 @@ export const CollaboratorAtions = styled.div`
     }
   }
 
-  div {
-    text-align: end;
-
-    button {
-      width: initial;
-
-      margin-left: 1rem;
-    }
+  button {
+    width: initial;
   }
 
   @media (max-width: 768px) {
     flex-direction: column-reverse !important;
 
-    div {
-      button {
-        width: 100%;
-        margin-left: 0;
-        margin-bottom: 1rem;
-      }
+    button {
+      width: 100%;
+      margin-bottom: 1rem;
     }
   }
 `;

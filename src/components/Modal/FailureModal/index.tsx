@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from 'react';
+import { XCircle } from 'phosphor-react';
 
 import { Button } from '../../Button';
 
 import { Container, Content, Buttons } from './styles';
-import { XCircle } from 'phosphor-react';
 
 interface ModalProps {
   onConfirm: () => void;

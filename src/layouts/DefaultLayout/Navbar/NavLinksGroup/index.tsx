@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import ReactTooltip from '@huner2/react-tooltip';
 import { MouseEvent, useState } from 'react';
-// import ReactTooltip from 'react-tooltip';
 
 import { Can } from '../../../../components/Can';
 import { links } from '../Links';

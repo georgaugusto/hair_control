@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
-import axios from 'axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { ArrowLeft } from 'phosphor-react';
+import axios from 'axios';
 import * as zod from 'zod';
+
+import { useModal } from '../../../hooks/useModal';
 
 import { Input } from '../../../components/Input';
 import { Button } from '../../../components/Button';
-import { ArrowLeft } from 'phosphor-react';
-import { useModal } from '../../../hooks/useModal';
 import { Modal } from '../../../components/Modal';
 import { SuccessModal } from '../../../components/Modal/SuccessModal';
 
-import { CollaboratorContainer, CreateClientTableFooter } from './styles';
+import { CollaboratorContainer, CollaboratorAtions } from './styles';
 
 interface ICollaboratorForm {
   name: string;
@@ -236,7 +237,7 @@ export function ViewCollaborator() {
           />
         </div>
 
-        <CreateClientTableFooter>
+        <CollaboratorAtions>
           <ArrowLeft
             size={24}
             onClick={() => navigate('/collaborator', { replace: true })}
@@ -268,7 +269,7 @@ export function ViewCollaborator() {
               <Button onClick={() => setEdit(!edit)}>Editar</Button>
             )}
           </div>
-        </CreateClientTableFooter>
+        </CollaboratorAtions>
       </form>
 
       <Modal

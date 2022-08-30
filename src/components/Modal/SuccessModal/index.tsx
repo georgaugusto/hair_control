@@ -1,5 +1,5 @@
-import { CheckCircle } from 'phosphor-react';
 import { useEffect, useCallback } from 'react';
+import { CheckCircle } from 'phosphor-react';
 
 import { Button } from '../../Button';
 
