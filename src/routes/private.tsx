@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import decode from 'jwt-decode';
 
-import IdentificationContext from '../contexts/Identification';
+import IdentificationContext from '../contexts/identification';
 
 interface PrivateRoutesProps {
   profiles?: number[];
