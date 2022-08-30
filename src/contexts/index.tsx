@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { IdentificationContextProvider } from './Identification';
+import { IdentificationContextProvider } from './identification';
 import { LayoutContextProvider } from './Layout';
 import { HeaderTitleContextProvider } from './HeaderTitle';
 
