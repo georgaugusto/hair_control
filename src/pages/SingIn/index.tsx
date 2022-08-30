@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import * as zod from 'zod';
+import decode from 'jwt-decode';
 
 import { Button } from './components/Button';
 import { Input } from './components/Input';
@@ -11,15 +12,29 @@ import { Input } from './components/Input';
 import logoImg2x from '../../assets/logo-celia.svg';
 
 import { Container, Content, AnimationContainer, Background } from './styles';
+import { Modal } from '../../components/Modal';
+import { FailureModal } from '../../components/Modal/FailureModal';
+import { useModal } from '../../hooks/useModal';
+import IdentificationContext from '../../contexts/identification';
 
 interface SingInFormData {
   email: string;
   password: string;
 }
 
+interface IToken {
+  exp: number;
+  iat: number;
+  iss: string;
+  jti: string;
+  nbf: number;
+  sub: string;
+  typ: string;
+}
+
 const signInFormSchema = zod.object({
   email: zod.string().email('Deve ser um e-mail válido').max(255),
-  password: zod.string().max(255),
+  password: zod.string().min(1, 'Senha Obrigatória.').max(255),
 });
 
 export function SingIn() {
@@ -31,7 +46,10 @@ export function SingIn() {
     resolver: zodResolver(signInFormSchema),
   });
 
+  const { isShown, toggle } = useModal();
   const navigate = useNavigate();
+  const { setUserIdentification } = useContext(IdentificationContext);
+
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -50,12 +68,19 @@ export function SingIn() {
             password: values.password,
           },
         );
-        const tokenJSON = JSON.stringify(response.data);
-        localStorage.setItem('@hair:user-1.0.0', tokenJSON);
+
+        const tokenDecode: IToken = decode(response.data.token);
+
+        setUserIdentification((state) => ({
+          ...state,
+          exp: tokenDecode?.exp,
+          iat: tokenDecode?.iat,
+          token: response.data.token,
+        }));
 
         navigate('/home', { replace: true });
-      } catch (err) {
-        console.log(err);
+      } catch {
+        toggle();
       } finally {
         setLoading(false);
       }
@@ -97,6 +122,19 @@ export function SingIn() {
       </Content>
 
       <Background />
+
+      <Modal
+        isShown={isShown}
+        hide={toggle}
+        modalContent={
+          <FailureModal
+            onConfirm={() => {
+              toggle();
+            }}
+            message="Não foi possível fazer login!"
+          />
+        }
+      />
     </Container>
   );
 }

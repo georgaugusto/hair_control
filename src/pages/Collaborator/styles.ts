@@ -7,35 +7,17 @@ export const CollaboratorContainer = styled.main`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  /* form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    gap: 3.5rem;
-  }
-
-  @media (max-width: 768px) {
-    form {
-      width: 100%;
-    }
-  } */
 `;
 
 export const TableActions = styled.div`
+  text-align: end;
+
   a {
     text-decoration: none;
 
-    color: ${(props) => props.theme['yellow-500']};
+    color: ${(props) => props.theme['blue-500']};
 
     margin-right: 1rem;
-  }
-
-  span {
-    color: ${(props) => props.theme['red-500']};
-
-    cursor: pointer;
   }
 `;
 

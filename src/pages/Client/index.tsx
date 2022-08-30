@@ -35,7 +35,7 @@ export function Client() {
   const navigate = useNavigate();
 
   const columnHelper = createColumnHelper<IClient>();
-
+  const [width, setWidth] = useState<number>(0);
   const [client, setClient] = useState<IClient[]>([clientProps]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -67,57 +67,115 @@ export function Client() {
     getAllClients();
   }, []);
 
+  useEffect(() => {
+    function handleResize() {
+      setWidth(window.innerWidth);
+    }
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+  }, []);
+
   const columns = useMemo(
-    () => [
-      columnHelper.accessor((row) => row.name, {
-        id: 'name',
-        cell: (info) => <i>{info.getValue()}</i>,
-        footer: (info) => info.column.id,
-        header: () => <span>Nome</span>,
-      }),
-      columnHelper.accessor((row) => row.phone, {
-        id: 'phone',
-        header: () => <span>Telefone</span>,
-        cell: (info) => (
-          <i>
-            {info.getValue().replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')}
-          </i>
-        ),
-        footer: (info) => info.column.id,
-      }),
-      // columnHelper.accessor((row) => row.cpf, {
-      //   id: 'cpf',
-      //   cell: (info) => <i>{info.getValue()}</i>,
-      //   footer: (info) => info.column.id,
-      //   header: () => <span>CPF</span>,
-      // }),
-      // columnHelper.accessor((row) => row.rg, {
-      //   id: 'rg',
-      //   cell: (info) => <i>{info.getValue()}</i>,
-      //   footer: (info) => info.column.id,
-      //   header: () => <span>RG</span>,
-      // }),
-      // columnHelper.accessor((row) => row.address, {
-      //   id: 'address',
-      //   cell: (info) => <i>{info.getValue()}</i>,
-      //   footer: (info) => info.column.id,
-      //   header: () => <span>Endereço</span>,
-      // }),
-      columnHelper.accessor((row) => row.id, {
-        id: 'action',
-        header: () => null,
-        cell: (info) => {
-          return (
-            <TableActions>
-              <Link to={`/client/${info.getValue()}`}>
-                <User size={20} />
-              </Link>
-            </TableActions>
-          );
-        },
-      }),
-    ],
-    [],
+    () =>
+      width <= 768
+        ? [
+            columnHelper.accessor((row) => row.name, {
+              id: 'name',
+              cell: (info) => <i>{info.getValue()}</i>,
+              footer: (info) => info.column.id,
+              header: () => <span>Nome</span>,
+            }),
+            columnHelper.accessor((row) => row.phone, {
+              id: 'phone',
+              header: () => <span>Telefone</span>,
+              cell: (info) => (
+                <i>
+                  {info
+                    .getValue()
+                    .replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')}
+                </i>
+              ),
+              footer: (info) => info.column.id,
+            }),
+            columnHelper.accessor((row) => row.id, {
+              id: 'action',
+              header: () => null,
+              cell: (info) => {
+                return (
+                  <TableActions>
+                    <Link to={`/client/${info.getValue()}`}>
+                      <User size={20} />
+                    </Link>
+                  </TableActions>
+                );
+              },
+            }),
+          ]
+        : [
+            columnHelper.accessor((row) => row.name, {
+              id: 'name',
+              cell: (info) => <i>{info.getValue()}</i>,
+              footer: (info) => info.column.id,
+              header: () => <span>Nome</span>,
+            }),
+            columnHelper.accessor((row) => row.phone, {
+              id: 'phone',
+              header: () => <span>Telefone</span>,
+              cell: (info) => (
+                <i>
+                  {info
+                    .getValue()
+                    .replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')}
+                </i>
+              ),
+              footer: (info) => info.column.id,
+            }),
+            columnHelper.accessor((row) => row.cpf, {
+              id: 'cpf',
+              cell: (info) => (
+                <i>
+                  {info
+                    .getValue()
+                    .replace(/(\d{3})?(\d{3})?(\d{3})?(\d{2})/, '$1.$2.$3-$4')}
+                </i>
+              ),
+              footer: (info) => info.column.id,
+              header: () => <span>CPF</span>,
+            }),
+            columnHelper.accessor((row) => row.rg, {
+              id: 'rg',
+              cell: (info) => (
+                <i>
+                  {info
+                    .getValue()
+                    .replace(/(\d{2})(\d{3})(\d{3})(\d{1})$/, '$1.$2.$3-$4')}
+                </i>
+              ),
+              footer: (info) => info.column.id,
+              header: () => <span>RG</span>,
+            }),
+            columnHelper.accessor((row) => row.address, {
+              id: 'address',
+              cell: (info) => <i>{info.getValue()}</i>,
+              footer: (info) => info.column.id,
+              header: () => <span>Endereço</span>,
+            }),
+            columnHelper.accessor((row) => row.id, {
+              id: 'action',
+              header: () => null,
+              cell: (info) => {
+                return (
+                  <TableActions>
+                    <Link to={`/client/${info.getValue()}`}>
+                      <User size={20} />
+                    </Link>
+                  </TableActions>
+                );
+              },
+            }),
+          ],
+    [width],
   );
 
   return (

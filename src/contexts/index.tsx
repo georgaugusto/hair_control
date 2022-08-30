@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { IdentificationContextProvider } from './identification';
 import { LayoutContextProvider } from './Layout';
 import { HeaderTitleContextProvider } from './HeaderTitle';
 
@@ -9,9 +10,11 @@ interface GlobalContextProviderProps {
 function GlobalContextProvider({ children }: GlobalContextProviderProps) {
   return (
     <>
-      <LayoutContextProvider>
-        <HeaderTitleContextProvider>{children}</HeaderTitleContextProvider>
-      </LayoutContextProvider>
+      <IdentificationContextProvider>
+        <LayoutContextProvider>
+          <HeaderTitleContextProvider>{children}</HeaderTitleContextProvider>
+        </LayoutContextProvider>
+      </IdentificationContextProvider>
     </>
   );
 }

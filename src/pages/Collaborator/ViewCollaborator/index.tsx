@@ -1,124 +1,116 @@
+import { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
-
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate, useParams } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
-
 import * as zod from 'zod';
 
 import { Input } from '../../../components/Input';
-
-import { CreateClientContainer, CreateClientTableFooter } from './styles';
-import { useCallback, useEffect, useState } from 'react';
 import { Button } from '../../../components/Button';
-import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'phosphor-react';
 import { useModal } from '../../../hooks/useModal';
 import { Modal } from '../../../components/Modal';
 import { SuccessModal } from '../../../components/Modal/SuccessModal';
 
-interface IClientForm {
+import { CollaboratorContainer, CreateClientTableFooter } from './styles';
+
+interface ICollaboratorForm {
   name: string;
   cpf: string;
-  rg: string;
-  address: string;
-  district: string;
-  phone: string;
+  email: string;
+  total_commission: number;
+  total_received: number;
+  inserted_at: string;
 }
 
-interface IClient {
-  address: string;
+interface ICollaborator {
   cpf: string;
-  district: string;
+  email: string;
   id: string;
   inserted_at: string;
   name: string;
-  phone: string;
-  rg: string;
+  total_commission: number;
+  total_received: number;
 }
 
-const clientPropsForm = {
+const collaboratorPropsForm = {
   name: '',
   cpf: '',
-  rg: '',
-  address: '',
-  district: '',
-  phone: '',
+  email: '',
+  total_commission: 0,
+  total_received: 0,
+  inserted_at: '',
 };
 
-const clientProps = {
-  address: '',
+const collaboratorProps = {
   cpf: '',
-  district: '',
+  email: '',
   id: '',
   inserted_at: '',
   name: '',
-  phone: '',
-  rg: '',
+  total_commission: 0,
+  total_received: 0,
 };
 
-const createClientFormValidationSchema = zod.object({
+const createCollaboratorFormValidationSchema = zod.object({
   name: zod.string().min(1, 'Nome Obrigatório.'),
   cpf: zod.string().min(14, 'Deve ser um CPF válido.'),
-  rg: zod.string().min(12, 'Deve ser um RG válido.'),
-  address: zod.string().min(1, 'Endereço Obrigatório.'),
-  district: zod.string().min(1, 'Bairro Obrigatório.'),
-  phone: zod.string().min(15, 'Deve ser um Telefone válido.'),
+  email: zod.string().min(12, 'Deve ser um E-mail válido.'),
 });
 
-export function EditClient() {
+export function ViewCollaborator() {
   const {
     register,
     handleSubmit,
     setValue,
     clearErrors,
     formState: { errors },
-  } = useForm<IClientForm>({
-    resolver: zodResolver(createClientFormValidationSchema),
-    defaultValues: clientPropsForm,
+  } = useForm<ICollaboratorForm>({
+    resolver: zodResolver(createCollaboratorFormValidationSchema),
+    defaultValues: collaboratorPropsForm,
   });
 
   const { isShown, toggle } = useModal();
-  const { clientId } = useParams();
+  const { collaboratorId } = useParams();
   const navigate = useNavigate();
 
-  const [client, setClient] = useState<IClient>(clientProps);
+  const [collaborator, setCollaborator] =
+    useState<ICollaborator>(collaboratorProps);
 
   const [edit, setEdit] = useState(false);
 
-  const getClient = useCallback(async () => {
+  const getCollaborator = useCallback(async () => {
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
 
       const response = await axios.get(
-        `https://hair-control.gigalixirapp.com/api/clients/${clientId}`,
+        `https://hair-control.gigalixirapp.com/api/employees/${collaboratorId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         },
       );
-      setClient(response.data);
+      setCollaborator(response.data);
     } catch (err) {
       console.log(err);
     } finally {
-      // navigate('/client', { replace: true });
+      //
     }
   }, []);
 
-  const putClient = useCallback(
-    async (values: IClientForm) => {
+  const putCollaborator = useCallback(
+    async (values: ICollaboratorForm) => {
       try {
         const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
-
         await axios.put(
-          `https://hair-control.gigalixirapp.com/api/clients/${clientId}`,
+          `https://hair-control.gigalixirapp.com/api/employees/${collaboratorId}`,
           {
             name: values.name,
             cpf: values.cpf,
-            rg: values.rg,
-            address: values.address,
-            district: values.district,
-            phone: values.phone,
+            email: values.email,
+            total_commission: values.total_commission,
+            total_received: values.total_received,
           },
           {
             headers: {
@@ -135,11 +127,11 @@ export function EditClient() {
     [navigate],
   );
 
-  const delClient = useCallback(async () => {
+  const delCollaborator = useCallback(async () => {
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
       await axios.delete(
-        `https://hair-control.gigalixirapp.com/api/clients/${clientId}`,
+        `https://hair-control.gigalixirapp.com/api/employees/${collaboratorId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -154,44 +146,41 @@ export function EditClient() {
   }, []);
 
   useEffect(() => {
-    getClient();
+    getCollaborator();
   }, []);
 
   useEffect(() => {
-    if (client) {
-      setValue('name', client.name);
+    if (collaborator) {
+      setValue('name', collaborator.name);
       setValue(
         'cpf',
-        client.cpf.replace(/(\d{3})?(\d{3})?(\d{3})?(\d{2})/, '$1.$2.$3-$4'),
+        collaborator.cpf.replace(
+          /(\d{3})?(\d{3})?(\d{3})?(\d{2})/,
+          '$1.$2.$3-$4',
+        ),
       );
-      setValue(
-        'rg',
-        client.rg.replace(/(\d{2})(\d{3})(\d{3})(\d{1})$/, '$1.$2.$3-$4'),
-      );
-      setValue('address', client.address);
-      setValue('district', client.district);
-      setValue(
-        'phone',
-        client.phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3'),
-      );
+      setValue('email', collaborator.email);
+      setValue('total_commission', collaborator.total_commission);
+      setValue('total_received', collaborator.total_received);
+      setValue('inserted_at', collaborator.inserted_at);
     }
-  }, [client]);
+  }, [collaborator]);
 
-  const handleforgotSignIn: SubmitHandler<IClientForm> = async (data) => {
+  const handleforgotSignIn: SubmitHandler<ICollaboratorForm> = async (data) => {
     const newData = {
-      address: data.address,
-      cpf: data.cpf.replace(/\D/g, ''),
-      district: data.district,
       name: data.name,
-      phone: data.phone.replace(/\D/g, ''),
-      rg: data.rg.replace(/\D/g, ''),
+      cpf: data.cpf.replace(/\D/g, ''),
+      email: data.email,
+      total_commission: data.total_commission,
+      total_received: data.total_received,
+      inserted_at: data.inserted_at,
     };
 
-    await putClient(newData);
+    await putCollaborator(newData);
   };
 
   return (
-    <CreateClientContainer>
+    <CollaboratorContainer>
       <form onSubmit={handleSubmit(handleforgotSignIn)}>
         <div>
           <Input
@@ -213,52 +202,50 @@ export function EditClient() {
           />
           <Input
             type="text"
-            label="RG"
-            placeholder="RG"
-            mask={'RG'}
+            label="E-mail"
+            placeholder="E-mail"
             disabled={!edit}
-            error={errors.rg}
-            {...register('rg')}
+            error={errors.email}
+            {...register('email')}
           />
         </div>
         <div>
           <Input
             type="text"
-            label="Endereço"
-            placeholder="Endereço"
-            disabled={!edit}
-            error={errors.address}
-            {...register('address')}
+            label="Comissão Total"
+            placeholder="Comissão Total"
+            disabled={true}
+            error={errors.total_commission}
+            {...register('total_commission')}
           />
           <Input
             type="text"
-            label="Bairro"
-            placeholder="Bairro"
-            disabled={!edit}
-            error={errors.district}
-            {...register('district')}
+            label="Total Recebido"
+            placeholder="Total Recebido"
+            disabled={true}
+            error={errors.total_received}
+            {...register('total_received')}
           />
           <Input
             type="text"
-            label="Telefone"
-            mask={'phone'}
-            placeholder="Telefone"
-            disabled={!edit}
-            error={errors.phone}
-            {...register('phone')}
+            label="Data de Criação"
+            placeholder="Data de Criação"
+            disabled={true}
+            error={errors.inserted_at}
+            {...register('inserted_at')}
           />
         </div>
 
         <CreateClientTableFooter>
           <ArrowLeft
             size={24}
-            onClick={() => navigate('/client', { replace: true })}
+            onClick={() => navigate('/collaborator', { replace: true })}
           />
           <div>
             {edit ? (
               <> </>
             ) : (
-              <Button onClick={() => delClient()} color="red">
+              <Button onClick={() => delCollaborator()} color="red">
                 Deletar
               </Button>
             )}
@@ -292,16 +279,16 @@ export function EditClient() {
             onConfirm={() => {
               toggle();
               setEdit(false);
-              navigate('/client', { replace: true });
+              navigate('/collaborator', { replace: true });
             }}
             message={
               edit
-                ? 'Cliente Alterado com sucesso!'
-                : 'Cliente excluído com sucesso!'
+                ? 'Colaborador Alterado com sucesso!'
+                : 'Colaborador excluído com sucesso!'
             }
           />
         }
       />
-    </CreateClientContainer>
+    </CollaboratorContainer>
   );
 }

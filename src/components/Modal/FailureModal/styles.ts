@@ -16,20 +16,19 @@ export const Content = styled.div`
   align-items: center;
 
   svg {
-    color: ${props => props.theme.primaria0};
+    color: ${(props) => props.theme['red-500']};
     font-size: 3rem;
   }
 
   p {
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
+    font-family: 'Mulish';
+    font-weight: 600;
     font-size: 1rem;
     line-height: 1.313rem;
 
     text-align: center;
 
-    color: ${props => props.theme.secundaria0};
+    color: ${(props) => props.theme['blue-gray-800']};
 
     padding-top: 1.5rem;
   }

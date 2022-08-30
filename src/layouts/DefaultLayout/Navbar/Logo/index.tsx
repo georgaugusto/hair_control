@@ -12,7 +12,7 @@ export function Logo({ compact }: ILogoProps) {
   return (
     <StyleLink
       to={{
-        pathname: '/dashboard',
+        pathname: '/home',
       }}
       compact={compact ? 1 : 0}
     >

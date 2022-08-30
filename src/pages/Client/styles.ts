@@ -7,20 +7,6 @@ export const ClientContainer = styled.main`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  /* form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    gap: 3.5rem;
-  }
-
-  @media (max-width: 768px) {
-    form {
-      width: 100%;
-    }
-  } */
 `;
 
 export const TableActions = styled.div`
@@ -32,12 +18,6 @@ export const TableActions = styled.div`
     color: ${(props) => props.theme['blue-500']};
 
     margin-right: 1rem;
-  }
-
-  span {
-    color: ${(props) => props.theme['red-500']};
-
-    cursor: pointer;
   }
 `;
 
