@@ -7,7 +7,7 @@ import * as zod from 'zod';
 import decode from 'jwt-decode';
 
 import { useModal } from '../../hooks/useModal';
-import IdentificationContext from '../../contexts/Identification';
+import IdentificationContext from '../../contexts/identification';
 
 import { Button } from './components/Button';
 import { Input } from './components/Input';
