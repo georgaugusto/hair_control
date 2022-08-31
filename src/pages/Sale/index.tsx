@@ -384,7 +384,6 @@ export function Sale() {
                     name="paymentMethod"
                     placeholder="Selecione um método de pagamento"
                     isClearable
-                    isDisabled
                     options={paymentMethod}
                     value={paymentValue || null}
                     onChange={(val) => onChange(val?.value)}
