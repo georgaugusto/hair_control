@@ -55,7 +55,7 @@ export function CreateClient() {
   const navigate = useNavigate();
   const { isShown, toggle } = useModal();
 
-  const signInUser = useCallback(async (values: IClientForm) => {
+  const createClient = useCallback(async (values: IClientForm) => {
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
 
@@ -82,7 +82,7 @@ export function CreateClient() {
     }
   }, []);
 
-  const handleforgotSignIn: SubmitHandler<IClientForm> = async (data) => {
+  const handleSubmitClient: SubmitHandler<IClientForm> = async (data) => {
     const newData = {
       address: data.address,
       cpf: data.cpf.replace(/\D/g, ''),
@@ -92,12 +92,12 @@ export function CreateClient() {
       rg: data.rg.replace(/\D/g, ''),
     };
 
-    await signInUser(newData);
+    await createClient(newData);
   };
 
   return (
     <CreateClientContainer>
-      <form onSubmit={handleSubmit(handleforgotSignIn)}>
+      <form onSubmit={handleSubmit(handleSubmitClient)}>
         <div>
           <Input
             type="text"

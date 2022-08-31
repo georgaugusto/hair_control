@@ -74,9 +74,10 @@ export function SingIn() {
 
         setUserIdentification((state) => ({
           ...state,
+          userId: tokenDecode?.sub,
+          token: response.data.token,
           exp: tokenDecode?.exp,
           iat: tokenDecode?.iat,
-          token: response.data.token,
         }));
 
         navigate('/home', { replace: true });

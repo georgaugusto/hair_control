@@ -8,15 +8,17 @@ import {
 import useLocalStorage from '../../hooks/useLocalStorage';
 
 interface IUserIdentificationProps {
+  userId: string;
+  token: string;
   exp: number;
   iat: number;
-  token: string;
 }
 
 const userIdentificationProps = {
+  userId: '',
+  token: '',
   exp: 0,
   iat: 0,
-  token: '',
 };
 
 type IdentificationProps = {

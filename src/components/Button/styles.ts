@@ -6,7 +6,7 @@ interface ContainerProps {
 
 export const Container = styled.button<ContainerProps>`
   width: 100%;
-  height: 2rem;
+  height: 2.375rem;
 
   border-radius: 6px;
   border: 0;
@@ -20,6 +20,7 @@ export const Container = styled.button<ContainerProps>`
 
   padding: 0 2rem;
 
+  border: 1px solid ${(props) => props.theme[`${props.color}-500`]};
   color: ${(props) => props.theme['blue-50']};
   background: ${(props) => props.theme[`${props.color}-500`]};
 

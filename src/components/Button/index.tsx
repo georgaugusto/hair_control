@@ -14,7 +14,7 @@ export function Button({
   ...rest
 }: ButtonProps) {
   return (
-    <Container color={color} type="button" {...rest}>
+    <Container color={color} type="button" disabled={loading} {...rest}>
       {loading ? 'Carregando...' : children}
     </Container>
   );

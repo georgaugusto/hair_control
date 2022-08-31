@@ -11,7 +11,7 @@ export const Container = styled.div<ContainerProps>`
   label {
     display: flex;
     flex-direction: column;
-    padding-bottom: 0.25rem;
+    padding-bottom: 0.5rem;
 
     font-family: 'Mulish';
     font-weight: 800;
@@ -22,21 +22,21 @@ export const Container = styled.div<ContainerProps>`
   }
 
   input {
-    height: 2rem;
+    height: 2.375rem;
 
     padding: 0.5rem 0 0.5rem 0.75rem;
     margin-bottom: 0.125rem;
 
-    background: ${(props) => props.theme['blue-gray-50']};
+    background: ${(props) => props.theme.white};
 
     font-family: 'Mulish';
     font-style: normal;
     font-weight: 400;
-    font-size: 0.875rem;
+    font-size: 1rem;
     line-height: 1.25rem;
 
     color: ${(props) => props.theme['blue-gray-600']};
-    border: 1px solid ${(props) => props.theme['blue-gray-200']};
+    border: 1px solid ${(props) => props.theme['gray-100']};
 
     border-radius: 6px;
 
@@ -44,11 +44,14 @@ export const Container = styled.div<ContainerProps>`
 
     &:focus {
       outline: none;
-      border: 0.5px solid ${(props) => props.theme['blue-gray-500']};
+      box-shadow: 0 0 0 1px ${(props) => props.theme['blue-500']};
+      border: 1px solid ${(props) => props.theme['blue-500']};
     }
 
     &:disabled {
-      background: ${(props) => props.theme['blue-gray-200']};
+      background: ${(props) => props.theme['white-50']};
+
+      color: ${(props) => props.theme['gray-300']};
 
       cursor: not-allowed;
     }
