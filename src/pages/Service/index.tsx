@@ -6,11 +6,12 @@ import axios from 'axios';
 
 import { Button } from '../../components/Button';
 import { Table } from '../../components/Table';
-
-import { ServicesContainer, ServicesHeader, TableActions } from './styles';
 import { Modal } from '../../components/Modal';
 import { FailureModal } from '../../components/Modal/FailureModal';
 import { useModal } from '../../hooks/useModal';
+import { Loading } from '../../components/Loading';
+
+import { ServicesContainer, ServicesHeader, TableActions } from './styles';
 
 interface IServices {
   id: string;
@@ -113,7 +114,7 @@ export function Service() {
       {error ? (
         <p>Erro no servidor</p>
       ) : loading ? (
-        <p>Carregando...</p>
+        <Loading loading={loading} />
       ) : (
         <Table data={services} columns={columns} />
       )}

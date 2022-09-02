@@ -4,13 +4,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { DotsThreeOutline } from 'phosphor-react';
 import axios from 'axios';
 
+import { useModal } from '../../hooks/useModal';
+
+import { FailureModal } from '../../components/Modal/FailureModal';
+import { Modal } from '../../components/Modal';
+import { Loading } from '../../components/Loading';
 import { Table } from '../../components/Table';
 import { Button } from '../../components/Button';
 
 import { ClientContainer, TableActions, ClientHeader } from './styles';
-import { FailureModal } from '../../components/Modal/FailureModal';
-import { Modal } from '../../components/Modal';
-import { useModal } from '../../hooks/useModal';
 
 interface IClient {
   id: string;
@@ -194,7 +196,7 @@ export function Client() {
       {error ? (
         <p>Erro no servidor</p>
       ) : loading ? (
-        <p>Carregando...</p>
+        <Loading loading={loading} />
       ) : (
         <Table data={client} columns={columns} />
       )}
