@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'phosphor-react';
 import axios from 'axios';
@@ -14,6 +14,7 @@ import { Button } from '../../../components/Button';
 import { SuccessModal } from '../../../components/Modal/SuccessModal';
 
 import { CreateClientContainer, CreateClientTableFooter } from './styles';
+import { FailureModal } from '../../../components/Modal/FailureModal';
 
 interface IClientForm {
   name: string;
@@ -55,7 +56,11 @@ export function CreateClient() {
   const navigate = useNavigate();
   const { isShown, toggle } = useModal();
 
+  const [apiError, setApiError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const createClient = useCallback(async (values: IClientForm) => {
+    setLoading(true);
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
 
@@ -75,9 +80,10 @@ export function CreateClient() {
           },
         },
       );
-    } catch (err) {
-      console.log(err);
+    } catch {
+      setApiError(true);
     } finally {
+      setLoading(false);
       toggle();
     }
   }, []);
@@ -153,7 +159,9 @@ export function CreateClient() {
             size={24}
             onClick={() => navigate('/client', { replace: true })}
           />
-          <Button type="submit">Cadastrar</Button>
+          <Button type="submit" loading={loading}>
+            Cadastrar
+          </Button>
         </CreateClientTableFooter>
       </form>
 
@@ -161,13 +169,22 @@ export function CreateClient() {
         isShown={isShown}
         hide={toggle}
         modalContent={
-          <SuccessModal
-            onConfirm={() => {
-              toggle();
-              navigate('/client', { replace: true });
-            }}
-            message="Cliente criado com sucesso!"
-          />
+          apiError ? (
+            <FailureModal
+              onConfirm={() => {
+                toggle();
+              }}
+              message="Não foi possivel criar o Cliente!"
+            />
+          ) : (
+            <SuccessModal
+              onConfirm={() => {
+                toggle();
+                navigate('/client', { replace: true });
+              }}
+              message="Cliente criado com sucesso!"
+            />
+          )
         }
       />
     </CreateClientContainer>

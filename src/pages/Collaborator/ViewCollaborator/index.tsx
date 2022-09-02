@@ -14,6 +14,7 @@ import { Modal } from '../../../components/Modal';
 import { SuccessModal } from '../../../components/Modal/SuccessModal';
 
 import { CollaboratorContainer, CollaboratorAtions } from './styles';
+import { FailureModal } from '../../../components/Modal/FailureModal';
 
 interface ICollaboratorForm {
   name: string;
@@ -34,6 +35,12 @@ interface ICollaborator {
   total_received: number;
 }
 
+interface IApiMethods {
+  getCollaborator: boolean;
+  putCollaborator: boolean;
+  delCollaborator: boolean;
+}
+
 const collaboratorPropsForm = {
   name: '',
   cpf: '',
@@ -51,6 +58,12 @@ const collaboratorProps = {
   name: '',
   total_commission: 0,
   total_received: 0,
+};
+
+const apiMethodsProps = {
+  getCollaborator: false,
+  putCollaborator: false,
+  delCollaborator: false,
 };
 
 const createCollaboratorFormValidationSchema = zod.object({
@@ -77,10 +90,12 @@ export function ViewCollaborator() {
 
   const [collaborator, setCollaborator] =
     useState<ICollaborator>(collaboratorProps);
-
   const [edit, setEdit] = useState(false);
+  const [apiError, setApiError] = useState<IApiMethods>(apiMethodsProps);
+  const [loading, setLoading] = useState<IApiMethods>(apiMethodsProps);
 
   const getCollaborator = useCallback(async () => {
+    setLoading((prevState) => ({ ...prevState, getCollaborator: true }));
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
 
@@ -93,15 +108,19 @@ export function ViewCollaborator() {
         },
       );
       setCollaborator(response.data);
-    } catch (err) {
-      console.log(err);
+    } catch {
+      setApiError((prevState) => ({ ...prevState, getCollaborator: true }));
     } finally {
-      //
+      setLoading((prevState) => ({ ...prevState, getCollaborator: false }));
     }
   }, []);
 
   const putCollaborator = useCallback(
     async (values: ICollaboratorForm) => {
+      setLoading((prevState) => ({
+        ...prevState,
+        putCollaborator: true,
+      }));
       try {
         const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
         await axios.put(
@@ -119,16 +138,24 @@ export function ViewCollaborator() {
             },
           },
         );
-      } catch (err) {
-        console.log(err);
+      } catch {
+        setApiError((prevState) => ({ ...prevState, putCollaborator: true }));
       } finally {
         toggle();
+        setLoading((prevState) => ({
+          ...prevState,
+          putCollaborator: false,
+        }));
       }
     },
     [navigate],
   );
 
   const delCollaborator = useCallback(async () => {
+    setLoading((prevState) => ({
+      ...prevState,
+      delCollaborator: true,
+    }));
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
       await axios.delete(
@@ -139,10 +166,14 @@ export function ViewCollaborator() {
           },
         },
       );
-    } catch (err) {
-      console.log(err);
+    } catch {
+      setApiError((prevState) => ({ ...prevState, delCollaborator: true }));
     } finally {
       toggle();
+      setLoading((prevState) => ({
+        ...prevState,
+        delCollaborator: false,
+      }));
     }
   }, []);
 
@@ -163,7 +194,10 @@ export function ViewCollaborator() {
       setValue('email', collaborator.email);
       setValue('total_commission', collaborator.total_commission);
       setValue('total_received', collaborator.total_received);
-      setValue('inserted_at', collaborator.inserted_at);
+      setValue(
+        'inserted_at',
+        new Date(collaborator.inserted_at).toLocaleDateString(),
+      );
     }
   }, [collaborator]);
 
@@ -261,12 +295,21 @@ export function ViewCollaborator() {
                 >
                   Cancelar
                 </Button>
-                <Button color="green" type="submit">
+                <Button
+                  color="green"
+                  type="submit"
+                  loading={loading.putCollaborator || loading.delCollaborator}
+                >
                   Salvar
                 </Button>
               </>
             ) : (
-              <Button onClick={() => setEdit(!edit)}>Editar</Button>
+              <Button
+                onClick={() => setEdit(!edit)}
+                loading={loading.getCollaborator}
+              >
+                Editar
+              </Button>
             )}
           </div>
         </CollaboratorAtions>
@@ -276,18 +319,38 @@ export function ViewCollaborator() {
         isShown={isShown}
         hide={toggle}
         modalContent={
-          <SuccessModal
-            onConfirm={() => {
-              toggle();
-              setEdit(false);
-              navigate('/collaborator', { replace: true });
-            }}
-            message={
-              edit
-                ? 'Colaborador Alterado com sucesso!'
-                : 'Colaborador excluído com sucesso!'
-            }
-          />
+          apiError.getCollaborator ? (
+            <SuccessModal
+              onConfirm={() => {
+                toggle();
+              }}
+              message="Opss erro no servidor!"
+            />
+          ) : apiError.putCollaborator || apiError.delCollaborator ? (
+            <FailureModal
+              onConfirm={() => {
+                toggle();
+              }}
+              message={
+                edit
+                  ? 'Não foi possivel alterar o Colaborador!'
+                  : 'Não foi possivel excluído o Colaborador!'
+              }
+            />
+          ) : (
+            <SuccessModal
+              onConfirm={() => {
+                toggle();
+                setEdit(false);
+                navigate('/collaborator', { replace: true });
+              }}
+              message={
+                edit
+                  ? 'Colaborador alterado com sucesso!'
+                  : 'Colaborador excluído com sucesso!'
+              }
+            />
+          )
         }
       />
     </CollaboratorContainer>

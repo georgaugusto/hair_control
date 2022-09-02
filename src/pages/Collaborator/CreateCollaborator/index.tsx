@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import axios from 'axios';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,6 +13,7 @@ import { Modal } from '../../../components/Modal';
 import { SuccessModal } from '../../../components/Modal/SuccessModal';
 
 import { CreateCollaboratorContainer, CollaboratorAtions } from './styles';
+import { FailureModal } from '../../../components/Modal/FailureModal';
 
 interface ICollaboratorForm {
   name: string;
@@ -51,7 +52,11 @@ export function CreateCollaborator() {
   const navigate = useNavigate();
   const { isShown, toggle } = useModal();
 
+  const [apiError, setApiError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const signInUser = useCallback(async (values: ICollaboratorForm) => {
+    setLoading(true);
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
 
@@ -69,9 +74,10 @@ export function CreateCollaborator() {
           },
         },
       );
-    } catch (err) {
-      console.log(err);
+    } catch {
+      setApiError(true);
     } finally {
+      setLoading(false);
       toggle();
     }
   }, []);
@@ -129,7 +135,9 @@ export function CreateCollaborator() {
             size={24}
             onClick={() => navigate('/collaborator', { replace: true })}
           />
-          <Button type="submit">Cadastrar</Button>
+          <Button type="submit" loading={loading}>
+            Cadastrar
+          </Button>
         </CollaboratorAtions>
       </form>
 
@@ -137,13 +145,22 @@ export function CreateCollaborator() {
         isShown={isShown}
         hide={toggle}
         modalContent={
-          <SuccessModal
-            onConfirm={() => {
-              toggle();
-              navigate('/collaborator', { replace: true });
-            }}
-            message="Colaborador criado com sucesso!"
-          />
+          apiError ? (
+            <FailureModal
+              onConfirm={() => {
+                toggle();
+              }}
+              message="Não foi possivel criar o Colaborador!"
+            />
+          ) : (
+            <SuccessModal
+              onConfirm={() => {
+                toggle();
+                navigate('/collaborator', { replace: true });
+              }}
+              message="Colaborador criado com sucesso!"
+            />
+          )
         }
       />
     </CreateCollaboratorContainer>

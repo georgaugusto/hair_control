@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const CollaboratorContainer = styled.main`
   flex: 1;
+  height: min-content !important;
 
   display: flex;
   flex-direction: column;

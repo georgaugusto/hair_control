@@ -8,6 +8,9 @@ import { Table } from '../../components/Table';
 import { Button } from '../../components/Button';
 
 import { ClientContainer, TableActions, ClientHeader } from './styles';
+import { FailureModal } from '../../components/Modal/FailureModal';
+import { Modal } from '../../components/Modal';
+import { useModal } from '../../hooks/useModal';
 
 interface IClient {
   id: string;
@@ -32,6 +35,7 @@ const clientProps = {
 };
 
 export function Client() {
+  const { isShown, toggle } = useModal();
   const navigate = useNavigate();
   const columnHelper = createColumnHelper<IClient>();
 
@@ -57,6 +61,7 @@ export function Client() {
       setClient(response.data);
     } catch {
       setError(true);
+      toggle();
     } finally {
       setLoading(false);
     }
@@ -193,6 +198,19 @@ export function Client() {
       ) : (
         <Table data={client} columns={columns} />
       )}
+
+      <Modal
+        isShown={isShown}
+        hide={toggle}
+        modalContent={
+          <FailureModal
+            onConfirm={() => {
+              toggle();
+            }}
+            message="Opss erro no servidor!"
+          />
+        }
+      />
     </ClientContainer>
   );
 }

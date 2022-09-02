@@ -12,6 +12,9 @@ import {
   TableActions,
   CollaboratorHeader,
 } from './styles';
+import { useModal } from '../../hooks/useModal';
+import { FailureModal } from '../../components/Modal/FailureModal';
+import { Modal } from '../../components/Modal';
 
 interface ICollaborator {
   cpf: string;
@@ -35,6 +38,7 @@ const collaboratorProps = {
 
 export function Collaborator() {
   const columnHelper = createColumnHelper<ICollaborator>();
+  const { isShown, toggle } = useModal();
   const navigate = useNavigate();
 
   const [collaborator, setCollaborator] = useState<ICollaborator[]>([
@@ -42,6 +46,7 @@ export function Collaborator() {
   ]);
   const [width, setWidth] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   const getAllCollaborators = useCallback(async () => {
     setLoading(true);
@@ -58,8 +63,9 @@ export function Collaborator() {
       );
 
       setCollaborator(response.data);
-    } catch (err) {
-      console.log(err);
+    } catch {
+      setError(true);
+      toggle();
     } finally {
       setLoading(false);
     }
@@ -181,11 +187,26 @@ export function Collaborator() {
         </Button>
       </CollaboratorHeader>
 
-      {loading ? (
+      {error ? (
+        <p>Erro no servidor</p>
+      ) : loading ? (
         <p>Carregando...</p>
       ) : (
         <Table data={collaborator} columns={columns} />
       )}
+
+      <Modal
+        isShown={isShown}
+        hide={toggle}
+        modalContent={
+          <FailureModal
+            onConfirm={() => {
+              toggle();
+            }}
+            message="Opss erro no servidor!"
+          />
+        }
+      />
     </CollaboratorContainer>
   );
 }

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +14,7 @@ import { Modal } from '../../../components/Modal';
 import { SuccessModal } from '../../../components/Modal/SuccessModal';
 
 import { CreateServiceContainer, ServiceAtions } from './styles';
+import { FailureModal } from '../../../components/Modal/FailureModal';
 
 interface IServiceForm {
   title: string;
@@ -43,7 +44,11 @@ export function CreateService() {
   const navigate = useNavigate();
   const { isShown, toggle } = useModal();
 
+  const [apiError, setApiError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const createService = useCallback(async (values: IServiceForm) => {
+    setLoading(true);
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
 
@@ -59,9 +64,10 @@ export function CreateService() {
           },
         },
       );
-    } catch (err) {
-      console.log(err);
+    } catch {
+      setApiError(true);
     } finally {
+      setLoading(false);
       toggle();
     }
   }, []);
@@ -101,7 +107,9 @@ export function CreateService() {
             size={24}
             onClick={() => navigate('/service', { replace: true })}
           />
-          <Button type="submit">Cadastrar</Button>
+          <Button type="submit" loading={loading}>
+            Cadastrar
+          </Button>
         </ServiceAtions>
       </form>
 
@@ -109,13 +117,22 @@ export function CreateService() {
         isShown={isShown}
         hide={toggle}
         modalContent={
-          <SuccessModal
-            onConfirm={() => {
-              toggle();
-              navigate('/service', { replace: true });
-            }}
-            message="Serviço criado com sucesso!"
-          />
+          apiError ? (
+            <FailureModal
+              onConfirm={() => {
+                toggle();
+              }}
+              message="Não foi possivel criar o Serviço!"
+            />
+          ) : (
+            <SuccessModal
+              onConfirm={() => {
+                toggle();
+                navigate('/service', { replace: true });
+              }}
+              message="Serviço criado com sucesso!"
+            />
+          )
         }
       />
     </CreateServiceContainer>

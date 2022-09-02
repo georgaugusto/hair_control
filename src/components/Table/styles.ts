@@ -16,8 +16,7 @@ export const TableContainer = styled.div<ContainerProps>`
       100vw - ${(props) => (props.compact ? '130px' : '316px')} - 4rem - 2rem
     );
 
-    background: #f7f7f8;
-    border: 1px solid #d4d4d4;
+    /* border: 1px solid #d4d4d4; */
     border-radius: 8px;
     margin: 1rem;
 
@@ -50,11 +49,11 @@ export const TableContainer = styled.div<ContainerProps>`
       border-spacing: 0;
 
       thead {
-        background: ${(props) => props.theme['blue-gray-100']};
+        background: ${(props) => props.theme['blue-100']};
         color: ${(props) => props.theme['blue-gray-800']};
 
         tr {
-          height: 2rem;
+          height: 3rem;
 
           font-family: 'Mulish';
           font-style: normal;
@@ -93,20 +92,24 @@ export const TableContainer = styled.div<ContainerProps>`
           height: 3rem;
 
           &:nth-child(odd) {
-            background: ${(props) => props.theme.white};
+            /* background: ${(props) => props.theme.white}; */
           }
           &:nth-child(even) {
-            background: ${(props) => props.theme['blue-gray-50']};
+            /* background: ${(props) => props.theme['blue-gray-50']}; */
           }
 
           td {
             padding: 0.5rem;
 
             font-family: 'Mulish';
-            font-style: normal !important;
+            font-style: normal;
             font-weight: 500;
             font-size: 1rem;
             line-height: 1.125rem;
+
+            i {
+              font-style: normal;
+            }
 
             border-bottom: 1px solid ${(props) => props.theme['blue-gray-100']};
 

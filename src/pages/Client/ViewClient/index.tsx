@@ -14,6 +14,7 @@ import { Modal } from '../../../components/Modal';
 import { SuccessModal } from '../../../components/Modal/SuccessModal';
 
 import { CreateClientContainer, CreateClientTableFooter } from './styles';
+import { FailureModal } from '../../../components/Modal/FailureModal';
 
 interface IClientForm {
   name: string;
@@ -35,6 +36,12 @@ interface IClient {
   rg: string;
 }
 
+interface IApiMethods {
+  getClient: boolean;
+  putClient: boolean;
+  delClient: boolean;
+}
+
 const clientPropsForm = {
   name: '',
   cpf: '',
@@ -53,6 +60,12 @@ const clientProps = {
   name: '',
   phone: '',
   rg: '',
+};
+
+const apiMethodsProps = {
+  getClient: false,
+  putClient: false,
+  delClient: false,
 };
 
 const createClientFormValidationSchema = zod.object({
@@ -82,8 +95,11 @@ export function ViewClient() {
 
   const [client, setClient] = useState<IClient>(clientProps);
   const [edit, setEdit] = useState(false);
+  const [apiError, setApiError] = useState<IApiMethods>(apiMethodsProps);
+  const [loading, setLoading] = useState<IApiMethods>(apiMethodsProps);
 
   const getClient = useCallback(async () => {
+    setLoading((prevState) => ({ ...prevState, getClient: true }));
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
 
@@ -96,15 +112,16 @@ export function ViewClient() {
         },
       );
       setClient(response.data);
-    } catch (err) {
-      console.log(err);
+    } catch {
+      setApiError((prevState) => ({ ...prevState, getClient: true }));
     } finally {
-      // navigate('/client', { replace: true });
+      setLoading((prevState) => ({ ...prevState, getClient: false }));
     }
   }, []);
 
   const putClient = useCallback(
     async (values: IClientForm) => {
+      setLoading((prevState) => ({ ...prevState, putClient: true }));
       try {
         const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
 
@@ -124,16 +141,21 @@ export function ViewClient() {
             },
           },
         );
-      } catch (err) {
-        console.log(err);
+      } catch {
+        setApiError((prevState) => ({ ...prevState, putClient: true }));
       } finally {
         toggle();
+        setLoading((prevState) => ({
+          ...prevState,
+          putClient: false,
+        }));
       }
     },
     [navigate],
   );
 
   const delClient = useCallback(async () => {
+    setLoading((prevState) => ({ ...prevState, delClient: true }));
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
       await axios.delete(
@@ -144,10 +166,11 @@ export function ViewClient() {
           },
         },
       );
-    } catch (err) {
-      console.log(err);
+    } catch {
+      setApiError((prevState) => ({ ...prevState, delClient: true }));
     } finally {
       toggle();
+      setLoading((prevState) => ({ ...prevState, delClient: false }));
     }
   }, []);
 
@@ -271,12 +294,21 @@ export function ViewClient() {
                 >
                   Cancelar
                 </Button>
-                <Button color="green" type="submit">
+                <Button
+                  color="green"
+                  type="submit"
+                  loading={loading.putClient || loading.delClient}
+                >
                   Salvar
                 </Button>
               </>
             ) : (
-              <Button onClick={() => setEdit(!edit)}>Editar</Button>
+              <Button
+                onClick={() => setEdit(!edit)}
+                loading={loading.getClient}
+              >
+                Editar
+              </Button>
             )}
           </div>
         </CreateClientTableFooter>
@@ -286,18 +318,38 @@ export function ViewClient() {
         isShown={isShown}
         hide={toggle}
         modalContent={
-          <SuccessModal
-            onConfirm={() => {
-              toggle();
-              setEdit(false);
-              navigate('/client', { replace: true });
-            }}
-            message={
-              edit
-                ? 'Cliente Alterado com sucesso!'
-                : 'Cliente excluído com sucesso!'
-            }
-          />
+          apiError.getClient ? (
+            <SuccessModal
+              onConfirm={() => {
+                toggle();
+              }}
+              message="Opss erro no servidor!"
+            />
+          ) : apiError.putClient || apiError.delClient ? (
+            <FailureModal
+              onConfirm={() => {
+                toggle();
+              }}
+              message={
+                edit
+                  ? 'Não foi possivel alterar o Cliente!'
+                  : 'Não foi possivel excluído o Cliente!'
+              }
+            />
+          ) : (
+            <SuccessModal
+              onConfirm={() => {
+                toggle();
+                setEdit(false);
+                navigate('/client', { replace: true });
+              }}
+              message={
+                edit
+                  ? 'Cliente alterado com sucesso!'
+                  : 'Cliente excluído com sucesso!'
+              }
+            />
+          )
         }
       />
     </CreateClientContainer>

@@ -14,6 +14,7 @@ import { Modal } from '../../../components/Modal';
 import { SuccessModal } from '../../../components/Modal/SuccessModal';
 
 import { ServiceContainer, ServiceAtions } from './styles';
+import { FailureModal } from '../../../components/Modal/FailureModal';
 
 interface IServiceForm {
   title: string;
@@ -25,6 +26,12 @@ interface IService {
   price: number;
 }
 
+interface IApiMethods {
+  getService: boolean;
+  putService: boolean;
+  delService: boolean;
+}
+
 const servicePropsForm = {
   title: '',
   price: '',
@@ -33,6 +40,12 @@ const servicePropsForm = {
 const serviceProps = {
   title: '',
   price: 0,
+};
+
+const apiMethodsProps = {
+  getService: false,
+  putService: false,
+  delService: false,
 };
 
 const createServiceFormValidationSchema = zod.object({
@@ -58,8 +71,11 @@ export function ViewService() {
 
   const [service, setService] = useState<IService>(serviceProps);
   const [edit, setEdit] = useState(false);
+  const [apiError, setApiError] = useState<IApiMethods>(apiMethodsProps);
+  const [loading, setLoading] = useState<IApiMethods>(apiMethodsProps);
 
   const getService = useCallback(async () => {
+    setLoading((prevState) => ({ ...prevState, getService: true }));
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
 
@@ -72,15 +88,16 @@ export function ViewService() {
         },
       );
       setService(response.data);
-    } catch (err) {
-      console.log(err);
+    } catch {
+      setApiError((prevState) => ({ ...prevState, getService: true }));
     } finally {
-      //
+      setLoading((prevState) => ({ ...prevState, getService: false }));
     }
   }, []);
 
   const putService = useCallback(
     async (values: IServiceForm) => {
+      setLoading((prevState) => ({ ...prevState, putService: true }));
       try {
         const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
         await axios.put(
@@ -95,9 +112,13 @@ export function ViewService() {
             },
           },
         );
-      } catch (err) {
-        console.log(err);
+      } catch {
+        setApiError((prevState) => ({ ...prevState, putService: true }));
       } finally {
+        setLoading((prevState) => ({
+          ...prevState,
+          putService: false,
+        }));
         toggle();
       }
     },
@@ -105,6 +126,7 @@ export function ViewService() {
   );
 
   const delService = useCallback(async () => {
+    setLoading((prevState) => ({ ...prevState, delService: true }));
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
       await axios.delete(
@@ -115,9 +137,10 @@ export function ViewService() {
           },
         },
       );
-    } catch (err) {
-      console.log(err);
+    } catch {
+      setApiError((prevState) => ({ ...prevState, delService: true }));
     } finally {
+      setLoading((prevState) => ({ ...prevState, delService: false }));
       toggle();
     }
   }, []);
@@ -196,12 +219,21 @@ export function ViewService() {
                 >
                   Cancelar
                 </Button>
-                <Button color="green" type="submit">
+                <Button
+                  color="green"
+                  type="submit"
+                  loading={loading.putService || loading.delService}
+                >
                   Salvar
                 </Button>
               </>
             ) : (
-              <Button onClick={() => setEdit(!edit)}>Editar</Button>
+              <Button
+                onClick={() => setEdit(!edit)}
+                loading={loading.getService}
+              >
+                Editar
+              </Button>
             )}
           </div>
         </ServiceAtions>
@@ -211,18 +243,38 @@ export function ViewService() {
         isShown={isShown}
         hide={toggle}
         modalContent={
-          <SuccessModal
-            onConfirm={() => {
-              toggle();
-              setEdit(false);
-              navigate('/service', { replace: true });
-            }}
-            message={
-              edit
-                ? 'Serviço Alterado com sucesso!'
-                : 'Serviço excluído com sucesso!'
-            }
-          />
+          apiError.getService ? (
+            <SuccessModal
+              onConfirm={() => {
+                toggle();
+              }}
+              message="Opss erro no servidor!"
+            />
+          ) : apiError.putService || apiError.delService ? (
+            <FailureModal
+              onConfirm={() => {
+                toggle();
+              }}
+              message={
+                edit
+                  ? 'Não foi possivel alterar o Serviço!'
+                  : 'Não foi possivel excluído o Serviço!'
+              }
+            />
+          ) : (
+            <SuccessModal
+              onConfirm={() => {
+                toggle();
+                setEdit(false);
+                navigate('/service', { replace: true });
+              }}
+              message={
+                edit
+                  ? 'Serviço Alterado com sucesso!'
+                  : 'Serviço excluído com sucesso!'
+              }
+            />
+          )
         }
       />
     </ServiceContainer>

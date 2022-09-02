@@ -8,6 +8,9 @@ import { Button } from '../../components/Button';
 import { Table } from '../../components/Table';
 
 import { ServicesContainer, ServicesHeader, TableActions } from './styles';
+import { Modal } from '../../components/Modal';
+import { FailureModal } from '../../components/Modal/FailureModal';
+import { useModal } from '../../hooks/useModal';
 
 interface IServices {
   id: string;
@@ -24,9 +27,11 @@ const servicesProps = {
 export function Service() {
   const columnHelper = createColumnHelper<IServices>();
   const navigate = useNavigate();
+  const { isShown, toggle } = useModal();
 
   const [services, setServices] = useState<IServices[]>([servicesProps]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   const getAllServices = useCallback(async () => {
     setLoading(true);
@@ -43,8 +48,9 @@ export function Service() {
       );
 
       setServices(response.data);
-    } catch (err) {
-      console.log(err);
+    } catch {
+      setError(true);
+      toggle();
     } finally {
       setLoading(false);
     }
@@ -104,11 +110,26 @@ export function Service() {
         </Button>
       </ServicesHeader>
 
-      {loading ? (
+      {error ? (
+        <p>Erro no servidor</p>
+      ) : loading ? (
         <p>Carregando...</p>
       ) : (
         <Table data={services} columns={columns} />
       )}
+
+      <Modal
+        isShown={isShown}
+        hide={toggle}
+        modalContent={
+          <FailureModal
+            onConfirm={() => {
+              toggle();
+            }}
+            message="Opss erro no servidor!"
+          />
+        }
+      />
     </ServicesContainer>
   );
 }
