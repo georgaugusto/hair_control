@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { SignOut, List } from 'phosphor-react';
 
+import IdentificationContext from '../../../contexts/identification';
 import LayoutContext from '../../../contexts/Layout';
 
 import { Title } from '../Navbar/PageTitle';
@@ -10,8 +11,11 @@ import logoImg from '../../../assets/logo-ignite.svg';
 import { Grid, Avatar, Menu, PageTitle, StyledLink, Options } from './styles';
 
 export function Header() {
+  const { userIdentification } = useContext(IdentificationContext);
   const { navMobile, setNavMobile } = useContext(LayoutContext);
   const showNavMobile = () => setNavMobile(!navMobile);
+
+  const userName = userIdentification.name;
 
   const handleSignOut = () => {
     window.localStorage.clear();
@@ -23,9 +27,14 @@ export function Header() {
         <Title />
       </PageTitle>
       <Options>
-        <p>Olá, Usuário</p>
+        <p>
+          Olá,{' '}
+          {userName
+            ? userName[0].toUpperCase() + userName.substr(1)
+            : 'Usuário'}
+        </p>
         <Avatar>
-          <span>U</span>
+          <span>{userName ? userName.substr(0, 1).toUpperCase() : 'U'}</span>
         </Avatar>
         <StyledLink to="/" onClick={() => handleSignOut()}>
           <SignOut />

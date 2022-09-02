@@ -12,6 +12,7 @@ interface IUserIdentificationProps {
   token: string;
   exp: number;
   iat: number;
+  name?: string;
 }
 
 const userIdentificationProps = {
@@ -19,6 +20,7 @@ const userIdentificationProps = {
   token: '',
   exp: 0,
   iat: 0,
+  name: '',
 };
 
 type IdentificationProps = {
