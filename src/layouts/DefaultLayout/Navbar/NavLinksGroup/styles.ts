@@ -38,8 +38,16 @@ export const LinksGroup = styled.div<ContainerType>`
   }
 
   .ReactTooltipCustomeStyles {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 4rem;
+    line-height: 1.5rem;
+
     a {
       color: ${(props) => props.theme['blue-gray-100']} !important;
+
+      gap: 1rem;
 
       &:hover {
         color: ${(props) => props.theme['blue-gray-400']} !important;
