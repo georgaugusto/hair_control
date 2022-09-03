@@ -42,16 +42,16 @@ export const links = [
   },
   {
     id: 4,
-    to: '/sale',
-    icon: <ShoppingBag />,
-    label: 'Vendas',
+    to: '/service',
+    icon: <Scissors />,
+    label: 'Serviços',
     profile: [1],
   },
   {
     id: 5,
-    to: '/service',
-    icon: <Scissors />,
-    label: 'Serviços',
+    to: '/sale',
+    icon: <ShoppingBag />,
+    label: 'Vendas',
     profile: [1],
   },
   {
