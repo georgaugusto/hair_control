@@ -39,31 +39,8 @@ export function Home() {
     }
   }, []);
 
-  const getSale = useCallback(async () => {
-    setLoading(true);
-    try {
-      const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
-
-      const response = await axios.get(
-        `https://hair-control.gigalixirapp.com/api/sales`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      console.log(response.data);
-    } catch {
-      setError(true);
-      toggle();
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
     getCollaborator();
-    getSale();
   }, []);
 
   return (
