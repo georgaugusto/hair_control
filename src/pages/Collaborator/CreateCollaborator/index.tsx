@@ -29,9 +29,30 @@ const collaboratorPropsForm = {
   password: '',
 };
 
+function isValidCPF(cpf: any) {
+  console.log(cpf);
+  if (typeof cpf !== 'string') return false;
+  cpf = cpf.replace(/[^\d]+/g, '');
+  if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) return false;
+  cpf = cpf.split('').map((el: any) => +el);
+  const rest = (count: any) =>
+    ((cpf
+      .slice(0, count - 12)
+      .reduce(
+        (soma: any, el: any, index: any) => soma + el * (count - index),
+        0,
+      ) *
+      10) %
+      11) %
+    10;
+  return rest(10) === cpf[9] && rest(11) === cpf[10];
+}
+
 const createCollaboratorFormValidationSchema = zod.object({
   name: zod.string().min(1, 'Nome Obrigatório.'),
-  cpf: zod.string().min(14, 'Deve ser um CPF válido.'),
+  cpf: zod.string().refine((val) => isValidCPF(val), {
+    message: 'Deve ser um CPF válido.',
+  }),
   email: zod.string().email('Deve ser um E-mail válido.'),
   password: zod
     .string()
