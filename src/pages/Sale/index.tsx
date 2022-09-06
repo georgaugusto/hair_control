@@ -98,9 +98,10 @@ const apiMethodsProps = {
 };
 
 const paymentMethod = [
-  { value: 'Dinheiro', label: 'Dinheiro' },
-  { value: 'Cartão', label: 'Cartão' },
-  { value: 'Pix', label: 'Pix' },
+  { value: 'dinheiro', label: 'Dinheiro' },
+  { value: 'cartão', label: 'Cartão' },
+  { value: 'pix', label: 'Pix' },
+  { value: 'fiado', label: 'Fiado' },
 ];
 
 const saleFormValidationSchema = Zod.object({
