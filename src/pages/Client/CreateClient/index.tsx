@@ -25,6 +25,24 @@ interface IClientForm {
   phone: string;
 }
 
+function isValidCPF(cpf: any) {
+  if (typeof cpf !== 'string') return false;
+  cpf = cpf.replace(/[^\d]+/g, '');
+  if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) return false;
+  cpf = cpf.split('').map((el: any) => +el);
+  const rest = (count: any) =>
+    ((cpf
+      .slice(0, count - 12)
+      .reduce(
+        (soma: any, el: any, index: any) => soma + el * (count - index),
+        0,
+      ) *
+      10) %
+      11) %
+    10;
+  return rest(10) === cpf[9] && rest(11) === cpf[10];
+}
+
 const clientPropsForm = {
   name: '',
   cpf: '',
@@ -36,7 +54,9 @@ const clientPropsForm = {
 
 const createClientFormValidationSchema = zod.object({
   name: zod.string().min(1, 'Nome Obrigatório.'),
-  cpf: zod.string().min(14, 'Deve ser um CPF válido.'),
+  cpf: zod.string().refine((val) => isValidCPF(val), {
+    message: 'Deve ser um CPF válido.',
+  }),
   rg: zod.string().min(12, 'Deve ser um RG válido.'),
   address: zod.string().min(1, 'Endereço Obrigatório.'),
   district: zod.string().min(1, 'Bairro Obrigatório.'),
