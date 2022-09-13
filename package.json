@@ -24,6 +24,7 @@
     "react-router-dom": "^6.3.0",
     "react-select": "^5.4.0",
     "react-spinners": "^0.13.4",
+    "recharts": "^2.1.14",
     "styled-components": "^5.3.5",
     "uuid": "^8.3.2",
     "zod": "^3.17.3"

@@ -1,7 +1,12 @@
 import styled from 'styled-components';
 
 export const ServiceContainer = styled.main`
+  height: 100%;
   flex: 1;
+
+  border-radius: 10px;
+  border: 1px solid ${(props) => props.theme['blue-gray-200']};
+  background: ${(props) => props.theme.white};
 
   padding: 2rem;
 

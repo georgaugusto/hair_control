@@ -1,9 +1,14 @@
 import styled from 'styled-components';
 
 export const CreateClientContainer = styled.main`
+  height: 100%;
   flex: 1;
 
   padding: 2rem;
+
+  border-radius: 10px;
+  border: 1px solid ${(props) => props.theme['blue-gray-200']};
+  background: ${(props) => props.theme.white};
 
   form {
     display: flex;

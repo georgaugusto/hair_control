@@ -5,7 +5,13 @@ interface ContainerProps {
 }
 
 export const SaleContainer = styled.main`
+  height: 100%;
+
   padding: 1rem;
+
+  border-radius: 10px;
+  border: 1px solid ${(props) => props.theme['blue-gray-200']};
+  background: ${(props) => props.theme.white};
 
   form {
     display: flex;

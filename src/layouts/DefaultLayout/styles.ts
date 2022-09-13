@@ -67,12 +67,12 @@ export const GridMain = styled.main<ContainerType>`
 
   grid-area: main;
 
-  background: ${(props) => props.theme.white};
+  /* background: ${(props) => props.theme.white}; */
 
   margin: 0 3.75rem 0 3rem;
 
-  border-radius: 10px;
-  border: 1px solid ${(props) => props.theme['blue-gray-200']};
+  /* border-radius: 10px;
+  border: 1px solid ${(props) => props.theme['blue-gray-200']}; */
 
   @media (min-width: 1023px) {
     margin-left: ${(props) => (props.compact ? '130px' : '316px')};

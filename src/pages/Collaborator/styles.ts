@@ -2,12 +2,16 @@ import styled from 'styled-components';
 
 export const CollaboratorContainer = styled.main`
   flex: 1;
-  height: min-content !important;
+  height: 100%;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  border-radius: 10px;
+  border: 1px solid ${(props) => props.theme['blue-gray-200']};
+  background: ${(props) => props.theme.white};
 `;
 
 export const TableActions = styled.div`
