@@ -25,6 +25,7 @@ import {
   GraphicContainer,
 } from './styles';
 import LayoutContext from '../../contexts/Layout';
+import { PieChartComponent } from './PieChartComponent';
 
 interface ICollaborator {
   cpf: string;
@@ -32,6 +33,7 @@ interface ICollaborator {
   id: string;
   inserted_at: string;
   name: string;
+  role: string;
   total_commission: number;
   total_received: number;
 }
@@ -70,12 +72,18 @@ interface IApiMethods {
   getAllClients: boolean;
 }
 
+interface ISalesChart {
+  name: string;
+  value: number;
+}
+
 const collaboratorProps = {
   cpf: '',
   email: '',
   id: '',
   inserted_at: '',
   name: '',
+  role: '',
   total_commission: 0,
   total_received: 0,
 };
@@ -124,6 +132,12 @@ export function Home() {
   const [collaborator, setCollaborator] =
     useState<ICollaborator>(collaboratorProps);
   const [sales, setSales] = useState<ISales[]>([salesProps]);
+  const [salesChart, setSalesChart] = useState<ISalesChart[]>([
+    {
+      name: '',
+      value: 0,
+    },
+  ]);
   const [services, setServices] = useState<IServices[]>([servicesProps]);
   const [client, setClient] = useState<IClient[]>([clientProps]);
   const [apiError, setApiError] = useState<IApiMethods>(apiMethodsProps);
@@ -165,16 +179,34 @@ export function Home() {
     try {
       const { token } = JSON.parse(localStorage.getItem('@hair:user-1.0.0')!);
 
-      const response = await axios.get(
-        'https://hair-control.gigalixirapp.com/api/sales',
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const isCommon =
+        collaborator.role !== 'commom'
+          ? `https://hair-control.gigalixirapp.com/api/sales?employee_name=${collaborator.name}`
+          : `https://hair-control.gigalixirapp.com/api/sales`;
+
+      const response = await axios.get(isCommon, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       setSales(response.data);
+      const serviceArray = response.data.map((s: any) => s.title_service);
+      const objectWithNumberOfTimesServicesAppear = serviceArray.reduce(
+        (acc, curr) => ((acc[curr] = -~acc[curr]), acc),
+        {},
+      );
+      const resultttt = Object.keys(objectWithNumberOfTimesServicesAppear).map(
+        (key) => [key, objectWithNumberOfTimesServicesAppear[key]],
+      );
+
+      const data: { name: string; value: number }[] = [];
+      const teste = resultttt.flatMap((s) => [
+        ...data,
+        { name: s[0], value: s[1] },
+      ]);
+
+      setSalesChart(teste);
     } catch {
       setApiError((prevState) => ({ ...prevState, getAllSales: true }));
     } finally {
@@ -237,7 +269,86 @@ export function Home() {
     const salesNumber = sales?.filter(
       (s) => s.name_employee === collaborator?.name,
     ).length;
-    return salesNumber || 0;
+
+    return collaborator.role === 'commom' ? salesNumber || 0 : sales.length;
+  }
+
+  function getBestCollaborator() {
+    const collaboratorArray = sales.map((s) => s.name_employee);
+
+    const objectWithNumberOfTimesCollaboratorsAppear = collaboratorArray.reduce(
+      (acc, curr) => ((acc[curr] = -~acc[curr]), acc),
+      {},
+    );
+
+    const mostRepeatedContributorNumber = Math.max.apply(
+      null,
+      Object.values(objectWithNumberOfTimesCollaboratorsAppear),
+    );
+    const mostRepeatedContributorName = Object.keys(
+      objectWithNumberOfTimesCollaboratorsAppear,
+    ).find(
+      (key) =>
+        objectWithNumberOfTimesCollaboratorsAppear[key] ===
+        mostRepeatedContributorNumber,
+    );
+
+    return mostRepeatedContributorName || 0;
+  }
+
+  function getBestClient() {
+    const clientArray = sales.map((s) => s.name_client);
+    const objectWithNumberOfTimesClientsAppear = clientArray.reduce(
+      (acc, curr) => ((acc[curr] = -~acc[curr]), acc),
+      {},
+    );
+
+    const mostRepeatedClientNumber = Math.max.apply(
+      null,
+      Object.values(objectWithNumberOfTimesClientsAppear),
+    );
+    const mostRepeatedClientName = Object.keys(
+      objectWithNumberOfTimesClientsAppear,
+    ).find(
+      (key) =>
+        objectWithNumberOfTimesClientsAppear[key] === mostRepeatedClientNumber,
+    );
+
+    return mostRepeatedClientName || '-';
+  }
+
+  function getBestService() {
+    const serviceArray = sales.map((s) => s.title_service);
+    const objectWithNumberOfTimesServicesAppear = serviceArray.reduce(
+      (acc, curr) => ((acc[curr] = -~acc[curr]), acc),
+      {},
+    );
+
+    const mostRepeatedServiceNumber = Math.max.apply(
+      null,
+      Object.values(objectWithNumberOfTimesServicesAppear),
+    );
+    const mostRepeatedServiceName = Object.keys(
+      objectWithNumberOfTimesServicesAppear,
+    ).find(
+      (key) =>
+        objectWithNumberOfTimesServicesAppear[key] ===
+        mostRepeatedServiceNumber,
+    );
+
+    return mostRepeatedServiceName || '-';
+  }
+
+  function getSalesValues() {
+    const salesPrices = sales.map((s) => s.price_service);
+
+    const totalSalesPrices = salesPrices.reduce((accumulator, value) => {
+      return accumulator + value;
+    }, 0);
+
+    return collaborator.role === 'commom'
+      ? collaborator.total_received
+      : totalSalesPrices;
   }
 
   const data = [
@@ -261,42 +372,12 @@ export function Home() {
         <div>
           <BoxContainer>
             <div>
-              <span>Comissão Total</span>
+              <span>Total</span>
               <span>
-                {collaborator.total_commission
-                  ? (collaborator.total_commission / 100).toLocaleString(
-                      'pt-br',
-                      {
-                        style: 'currency',
-                        currency: 'BRL',
-                      },
-                    )
-                  : Number(0).toLocaleString('pt-br', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    })}
-              </span>
-            </div>
-            <div>
-              <Wallet size={32} />
-            </div>
-          </BoxContainer>
-          <BoxContainer>
-            <div>
-              <span>Total Recebido</span>
-              <span>
-                {collaborator.total_received
-                  ? (collaborator.total_received / 100).toLocaleString(
-                      'pt-br',
-                      {
-                        style: 'currency',
-                        currency: 'BRL',
-                      },
-                    )
-                  : Number(0).toLocaleString('pt-br', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    })}
+                {(getSalesValues() / 100).toLocaleString('pt-br', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })}
               </span>
             </div>
             <div>
@@ -317,12 +398,36 @@ export function Home() {
           <BoxContainer>
             <div>
               <span>Melhor Cliente</span>
-              <span>{sales?.map((s) => s.name_client)[0]}</span>
+              <span>{getBestClient()}</span>
             </div>
             <div>
               <UserRectangle size={32} />
             </div>
           </BoxContainer>
+        </div>
+        <div>
+          <BoxContainer>
+            <div>
+              <span>Melhor Serviço</span>
+              <span>{getBestService()}</span>
+            </div>
+            <div>
+              <ClipboardText size={32} />
+            </div>
+          </BoxContainer>
+          {collaborator.role !== 'commom' ? (
+            <BoxContainer>
+              <div>
+                <span>Melhor Colaborador</span>
+                <span>{getBestCollaborator()}</span>
+              </div>
+              <div>
+                <UserRectangle size={32} />
+              </div>
+            </BoxContainer>
+          ) : (
+            <> </>
+          )}
         </div>
       </HeaderContainer>
 
@@ -331,7 +436,7 @@ export function Home() {
 
         <GraphicContainer compact={compact ? 1 : 0}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart width={500} height={300} data={data}>
+            {/* <BarChart width={500} height={300} data={data}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
                 dataKey="date"
@@ -363,7 +468,9 @@ export function Home() {
                 fill="#8884d8"
               />
               <Bar dataKey="Escova" stackId="a" fill="#82ca9d" />
-            </BarChart>
+            </BarChart> */}
+            {/* <> </> */}
+            <PieChartComponent data={salesChart} />
           </ResponsiveContainer>
         </GraphicContainer>
       </Teste>

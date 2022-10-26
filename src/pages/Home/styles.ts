@@ -15,13 +15,21 @@ export const HeaderContainer = styled.div`
   flex-direction: row;
   justify-content: flex-start;
 
+  > div {
+    &:nth-child(1) {
+      > div {
+        height: calc(100% - 1rem) !important;
+      }
+    }
+  }
+
   @media (max-width: 768px) {
     flex-direction: column;
   }
 `;
 
 export const BoxContainer = styled.div`
-  width: 18rem;
+  min-width: 16rem;
   display: flex;
   justify-content: space-between;
 
@@ -30,7 +38,7 @@ export const BoxContainer = styled.div`
   background: ${(props) => props.theme.white};
 
   padding: 1rem;
-  margin: 0 2rem 2rem 0;
+  margin: 0 1rem 1rem 0;
 
   > div {
     display: flex;
@@ -85,6 +93,11 @@ export const Teste = styled.div`
 export const GraphicContainer = styled.div<GraphicContainerProps>`
   width: 100%;
   height: calc(100vh - 25rem - 4rem - 1rem);
+
+  > div {
+    display: flex;
+    justify-content: center;
+  }
 
   margin: 2rem 0;
   padding-left: 1rem;

@@ -277,7 +277,8 @@ export function Sale() {
   );
 
   const handleforgotSignIn: SubmitHandler<ISaleForm> = async (data) => {
-    await createSale(data);
+    await console.log(data);
+    // await createSale(data);
   };
 
   return (
