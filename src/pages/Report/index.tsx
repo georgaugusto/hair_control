@@ -191,19 +191,19 @@ export function Report() {
         `https://hair-control.gigalixirapp.com/api/sales?${
           filter?.employeeName === '' || filter?.employeeName === undefined
             ? ''
-            : `employee_name=${filter?.employeeName} `
+            : `employee_name=${filter?.employeeName}&`
         }${
           filter?.clientName === '' || filter?.clientName === undefined
             ? ''
-            : `client_name=${filter?.clientName} `
+            : `client_name=${filter?.clientName}&`
         }${
           filter?.serviceName === '' || filter?.serviceName === undefined
             ? ''
-            : `service_name=${filter?.serviceName} `
+            : `service_name=${filter?.serviceName}&`
         }${
           filter?.paymentMethod === '' || filter?.paymentMethod === undefined
             ? ''
-            : `payment_method=${filter?.paymentMethod} `
+            : `payment_method=${filter?.paymentMethod}&`
         }`,
         {
           headers: {
